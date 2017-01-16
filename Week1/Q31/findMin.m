@@ -38,8 +38,8 @@ while 1
 
 	%display(varargin);pause();
     Hv=@(v)CGfunc(w,v,varargin{:})
-	tol=1e-3;
-    d=pcg(Hv,g,tol);
+	
+    d=pcg(Hv,g,optTol);
 	%display(size(d));pause();	
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
     %% Line-search to find an acceptable value of alpha

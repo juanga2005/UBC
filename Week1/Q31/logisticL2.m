@@ -19,7 +19,7 @@ end
 function [yhat] = predict(model,Xhat)
 [t,d] = size(Xhat);
 Xhat = [ones(t,1) Xhat];
-w = model.w;
+w = model.w;size(w);
 yhat = sign(Xhat*w);
 end
 
