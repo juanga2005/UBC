@@ -5,7 +5,7 @@ clear all
 
 
 %Setting the parameters
-sigma=1;lambda=0.1;
+sigma=0.35;lambda=0.05;
 
 %Loading the data
 load nonLinear.mat
@@ -20,7 +20,7 @@ model=leastSquaresRBFL2(X,y,lambda,sigma);
 yhat=model.predict(model,Xtest,X,sigma);
 
 %Report test error
-squaredTestError=sum((yhat-ytest).^2)/t
+squaredTestError=norm(yhat-ytest)/t
 
 %Plotting
 plot(X,y,'b.');

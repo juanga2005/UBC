@@ -201,14 +201,76 @@ Since this is an affine transfomration of $w$ we conclude that
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%CV%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cross-Validation}
-\newpage
+\subsubsection{Plot leastSquaresRBFL2.m}
+Using the function leastSquaresRBFL2.m with the aid of the function rbfBasis.m
+ we obtain the following plot with $\sigma=1$ and $\lambda=1$.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{./Q12/RBFs1l1plot}
+\caption{Linear regression with Gaussian Radial Basis Functions.}
+\label{figRBFregression}
+\end{figure}
 
+\subsubsection{Computational Cost}
+\begin{itemize}
+\item Linear Basis
+\end{itemize}
+For the linear with  number of features  $d$  the feature matrix $X$ is an $n\times d$
+matrix. To train this case we need to calculate
+\begin{equation*}
+w=(X^{T}X)^{-1}X^{T}y.
+\end{equation*}
+The multiplication of $X^{T}X$ to get a $d\times d$ matrix costs $\mathcal{O}(nd^{2})$. The cost of 
+inverting the system is  $\mathcal{O}(d^{3})$. The 
+multiplication of $X^{T}y$ takes $\mathcal{O}(nd)$. Finally the multiplication of the $d\times d$
+matrix  $(X^{T}X)^{-1}$ with
+the $d\times 1$  vector $X^{T}y$  is  $\mathcal{O}(d^{2})$. Adding up all this contributions
+we conclude that
+\begin{equation*}
+cost=\mathcal{O}(d^{3})+\mathcal{O}(nd^{2}).
+\end{equation*}
+So in the previous exercise with $d=2$ we get that the cost is $\mathcal{O}(n)$.
+\begin{itemize}
+\item Gaussian RBFs
+\end{itemize}
+If the number of features is $d$ with $n$ training points we can define the vector
+\begin{equation*}
+\phi(x)=[1\text{ } \phi_{1}(x),\ldots,\phi_{n}(x)],
+\end{equation*}
+where 
+\begin{equation*}
+\phi_{j}(x)=e^{-\frac{1}{2\sigma}\|x-x_{j}\|_{2}^{2}}.
+\end{equation*}
+Here $x_{j}\in\mathbb{R}^{d}$ is the $j-th$ row of the feature maxtrix $X$. With this we create the 
+matrix $\Phi$ with entries
+\begin{equation*}
+\Phi_{ij}=\phi_{i}(x_{j})\qquad\text{and } \Phi_{i1}=1,
+\end{equation*}
+hence $\Phi$ is an $n\times n+1$ matrix. Now, calculating the euclidean distance of a $d-$ dimensional 
+vector takes $\mathcal{O}(d)$, and we need to calculate $n^{2}$ distances, hence the cost of constructing
+the matrix $\Phi$ would be $\mathcal{O}(n^{2}d)$ (neglecting the cost of calculation the exponential).
 
+To train the system we need to compute
+\begin{equation*}
+w=(\Phi^{T}\Phi)^{-1}\Phi^{T}y.
+\end{equation*}
 
+The cost of the multiplication to get the $n+1\times n+1$
+matrix  $\Phi^{T}\Phi$ is $\mathcal{O}(n^{3})$. Inverting this matrix also costs $\mathcal{O}(n^{3})$.
+The multiplication of the $n+1\times n$ matrix $\Phi^{T}$ with the $n\times 1$ vector y costs
+$\mathcal{O}(n^{2})$. Finally the multiplication of the matrix $(\Phi^{T}\Phi)^{-1}$ with the vector
+$\Phi^{T}y$ is $\mathcal{O}(n^{2})$. Hence the cost of training with RBFs is
+\begin{equation*}
+cost=\mathcal{O}(n^{3})+\mathcal{O}(n^{2}d).
+\end{equation*}
+\begin{itemize}
+\item{Classifying new examples}
+\end{itemize}
+If we have $t$ examples, in the linear case we need to compute $Xw$, where $X$ is a $t\times d$ matrix
+hence the cost is $\mathcal{O}(td)$. For the RBFs we need to calculate $\Phi w$ where $\Phi$ is 
+ a $t\times n$ matrix. Calculating this matrix takes $\mathcal{O}(ndt)$. In this case the cost is $\mathcal{O}(ndt)$.
 
-
-
-
+\subsubsection{Cross-Validation to set $\lambda$ and $\sigma$}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%MAP estimation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{MAP estimation}
@@ -515,6 +577,69 @@ the training error was
 \|\frac{\hat{y}-y_{test}}{500}\|_{1}=3.0746.
 \end{equation*}
 Using SVM with $\epsilon=1$ was slightly less accurate than robust regression.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Numerical Optimization %%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Optimization}
+\subsection{Gradient Descent and Newton's Method}
+By modifying the script findMin.m to count the number of iterations and backtracking we can 
+assess the performance under changes in how to pick the parameter alpha in the backtracking line-search.
+
+\subsubsection{Replacing $\alpha\leftarrow\alpha/2$}
+\begin{enumerate}
+\item Number of Backtracking: 69
+\item Number of Iterations: 13
+\end{enumerate}
+
+\subsubsection{Reseting $alpha$ to $\alpha\leftarrow -\alpha\frac{v^{T}\nabla f(w)}{v^{T}v}$}
+In this case by reseting $\alpha$ as $\alpha\leftarrow -\alpha\frac{v^{T}\nabla f(w)}{v^{T}v}$ we
+have to posibilities, we can let the update of $\alpha$ to be the third order Hermite polynomial
+interpolation or as before $\alpha\leftarrow\frac{\alpha}{2}$. We are going to examine both cases.
+
+\begin{itemize}
+\item Cubic Hermite polynomial interpolation for updating $\alpha$.
+	\begin{enumerate}
+	\item Number of Backtracking: 6
+	\item Number of Iterations: 10
+	\end{enumerate}
+
+\item Updating $\alpha\leftarrow\frac{\alpha}{2}$.
+	\begin{enumerate}
+	\item Number of Backtracking: 6
+	\item Number of Iterations: 10
+	\end{enumerate}
+\end{itemize} 
+As we can see reseting $\alpha$ in this way allows the possibility to choose a simple update as
+$\alpha\leftarrow\frac{\alpha}{2}$ without compromising efficiency.
+
+\subsubsection{Fixing the steps size to $\alpha=\frac{1}{L}$ with $L=\frac{1}{4}\max\{eig(X^{T}X)\}+\lambda$}
+In this case, where $\alpha$ is not being updated we have that the Armijo condition is not satisfied.
+
+
+\subsubsection{Changing the direction to $d=(\nabla^{2} f(w))^{-1}\nabla{f})$}
+As before we have to choices, by letting $\alpha$ to update according to the interpolation
+of the Hermite polynomial or by splitting $\alpha$ by 2 every time. We are going to examine both.
+
+
+\begin{itemize}
+\item Cubic Hermite polynomial interpolation for updating $\alpha$.
+	\begin{enumerate}
+	\item Number of Backtracking: 0
+	\item Number of Iterations: 5 
+	\end{enumerate}
+
+\item Updating $\alpha\leftarrow\frac{\alpha}{2}$.
+	\begin{enumerate}
+	\item Number of Backtracking: 0
+	\item Number of Iterations: 5 
+	\end{enumerate}
+\end{itemize} 
+In this case, since there is no backtracking is irrelevant what $\alpha$ update we use. As we can see there is
+a tradeoff. The number of iterations before reaching the tolerance is very low compared to the other methods, but
+there is the extra cost of calculating the Hessian and solving the system $\nabla^{2} f(w) d=\nabla f$ using
+Cholesky factorization (Taking advantage of the convexity of the objective function).
+
 
 
 
