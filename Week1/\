@@ -113,7 +113,7 @@ Since this last expression is independent of $w$ we conclude
 \nabla^{2}f(w)=0.
 \end{equation*}
 
-\subsubsection{Quadratic Function}
+\subsubsection{Cuadratic Function}
 Consider the function
 \begin{equation*}
 f(w)=w^{T}w+w^{T}X^{T}Xw+\sum_{i=1}^{d}\sum_{j=1}^{d}w_{i}w_{j}a_{ij}.
@@ -173,61 +173,13 @@ Hence
 \begin{equation*}
 \nabla f(w)=\sum_{i=1}^{n}(x_{i}\otimes x_{i})w-\sum_{i=1}^{n}y^{i}x^{i}+\lambda w.
 \end{equation*}
-Since this is an affine transformation of $w$ we conclude that
+Since this is an affine transfomration of $w$ we conclude that
 \begin{equation*}
 \nabla^{2}f(w)=\sum_{i=1}^{n}x_{i}\otimes x_{i}+\lambda I.
 \end{equation*}
 
 \subsubsection{Weighted L2-regularized probit regression}
-For the probit regression observe first that
-\begin{equation*}
-\nabla(\int_{0}^{y^{i}w^{T}x^{i}}e^{-\frac{x}{2}}dx)=y^{i}e^{-\frac{(y^{i}w^{T}x^{i})^{2}}{2}}x^{i}.
-\end{equation*}
-With this result it is not hard to check
-\begin{equation*}
-\nabla\left(-\sum_{i=1}^{n}\log(\Phi(y^{i}w^{T}x^{i}))\right)=
--\sum_{i=1}^{n}\frac{y^{i}e^{-\frac{y^{i}w^{T}x^{i}}{2}}}{\sqrt{2\pi}\Phi(y^{i}w^{T}x^{i})}x^{i}.
-\end{equation*}
-On the other hand if we define
-\begin{equation*}
-B=diag(\sqrt{b_{1}},\ldots,\sqrt{b_{d}}),
-\end{equation*}
-then
-\begin{equation*}
-\frac{1}{2}\sum_{j=1}^{d}b_{j}w_{j}=\frac{1}{2}\|Bw\|^{2},
-\end{equation*}
-hence
-\begin{equation*}
-\frac{1}{2}\nabla\left(\|Bw\|^{2}\right)=B^{T}Bw.
-\end{equation*}
-Combining all gradients we conclude
-\begin{equation*}
-\nabla f(w)=-\sum_{i=1}^{n}\frac{y^{i}e^{-\frac{y^{i}w^{T}x^{i}}{2}}}{\sqrt{2\pi}\Phi(y^{i}w^{T}x^{i})}x^{i}
-+B^{T}Bw.
-\end{equation*}
-Since the first summand is a linear combination of the columns of $X$ we can define the vector function
- $c(w)$ with entries
-\begin{equation*}
-c_{i}(w)=\frac{y^{i}e^{-\frac{y^{i}w^{T}x^{i}}{2}}}{\sqrt{2\pi}\Phi(y^{i}w^{T}x^{i})}.
-\end{equation*}
-with this notation the gradient of $f$ can be written as 
-\begin{equation*}
-\nabla f(w)=Xc(w)+B^{T}Bw.
-\end{equation*}
-To find the second derivative (Hessian) of $f$ first recall that if$g(x)$ is 
-a function  $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$
-then its derivative is given by the $m\times n$ matrix $\nabla g$ with entries
-\begin{equation*}
-(\nabla g)_{ij}=\frac{\partial g_{i}}{\partial x_{j}}.
-\end{equation*}
-With this in mind it is not hard to prove that 
-\begin{equation*}
-\nabla\left(Xc(w)\right)=X\nabla c(w).
-\end{equation*}
-Hence the Hessian of $f$ can be found as
-\begin{equation*}
-\nabla^{2}f(w)=X\nabla c(w)+B^{T}B.
-\end{equation*}
+
 
 
 \newpage
@@ -273,7 +225,7 @@ where
 \begin{equation*}
 \phi_{j}(x)=e^{-\frac{1}{2\sigma}\|x-x_{j}\|_{2}^{2}}.
 \end{equation*}
-Here $x_{j}\in\mathbb{R}^{d}$ is the $j-th$ row of the feature matrix $X$. With this we create the 
+Here $x_{j}\in\mathbb{R}^{d}$ is the $j-th$ row of the feature maxtrix $X$. With this we create the 
 matrix $\Phi$ with entries
 \begin{equation*}
 \Phi_{ij}=\phi_{i}(x_{j})\qquad\text{and } \Phi_{i1}=1,
@@ -303,27 +255,7 @@ hence the cost is $\mathcal{O}(td)$. For the RBFs we need to calculate $\Phi w$ 
  a $t\times n$ matrix. Calculating this matrix takes $\mathcal{O}(ndt)$. In this case the cost is $\mathcal{O}(ndt)$.
 
 \subsubsection{Cross-Validation to set $\lambda$ and $\sigma$}
-By running a $10-fold$ validation procedure we get the following error surface contour plot.
-\begin{figure}[H]
-\includegraphics[scale=0.5]{./Q12/errorcontour}
-\caption{Error plot for the $10-$fold cross validation procedure using the average error in the
-two norm between the test set and the prediction by getting $w$ from the training set.}
-\label{figCV}
-\end{figure}
-By doing a grid search for the minimum (which can be located in the bottom left corner in Figure
-\ref{figCV}) occurs at
-\begin{equation*}
-(\sigma,\lambda)=(0.35,0.05).
-\end{equation*}
-As we can see the value of $\lambda$ is being push towards the smallest possible value, as regularization
-is not that important for this set of data. The results obtained by fitting the linear 
-regression with the RBFs with the values of the parameters as above is shown below. 
-\begin{figure}[H]
-\includegraphics[scale=0.5]{./Q12/RBFwCV}
-\caption{Fitting by using the values given by the cross validation procedure.}
-\end{figure}
 
-\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%MAP estimation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{MAP estimation}
 \subsubsection{Laplace distribution}
@@ -333,15 +265,15 @@ y^{i}\sim\mathcal{L}(w^{T}x^{i},1),\qquad w_{j}\sim\mathcal{L}(0,\frac{1}{\lambd
 \end{equation*}
 In this case the posterior looks like (assuming independence of the variables)
 \begin{equation*}
-p(w|D)\propto\prod_{i=1}^{n}p(y^{i}|x^{i},w)\prod_{j=1}^{d}p(w_{j}).
+p(w|D)\propto\prod_{i=1}^{n}p(y^{i}|x^{i},w)\prod_{j=1}^{d+1}p(w_{j}).
 \end{equation*}
-Recalling the definition of Laplace distribution we get
+Recalling the definition of laplaces distribution we get
 \begin{equation*}
-p(w|D)\propto e^{-\sum_{i=1}^{n}|y^{i}-w^{T}x_{i}|}\frac{\lambda}{2}e^{-\sum_{j=1}^{d}\lambda|w_{j}|}.
+p(w|D)\propto e^{-\sum_{i=1}^{n}|y^{i}-w^{T}x_{i}|}\frac{\lambda}{2}e^{-\sum_{j=1}^{d+1}\lambda|w_{j}|}.
 \end{equation*}
 This means that the negative log likelihood is given by (omitting constants that don't depend on $w$)
 \begin{equation*}
--\log(p(w|D))=\sum_{i=1}^{n}|y^{i}-w^{T}x_{i}|+\lambda\sum_{j=1}^{d} |w_{j}|.
+-\log(p(w|D))=\sum_{i=1}^{n}|y^{i}-w^{T}x_{i}|+\lambda\sum_{j=1}^{d+1} |w_{j}|.
 \end{equation*}
 Recalling the definition of the $L1$ norm we get that minimizing the log likelihood
 is equivalent to minimize
@@ -357,16 +289,16 @@ y^{i}\sim\mathcal{N}(w^{T}x^{i},\sigma_{i}^{2}),\qquad w_{j}\sim\mathcal{N}(0,\f
 \end{equation*}
 As before we have
 \begin{equation*}
-p(w|D)\propto\prod_{i=1}^{n}p(y^{i}|x^{i},w)\prod_{j=1}^{d}p(w_{j}).
+p(w|D)\propto\prod_{i=1}^{n}p(y^{i}|x^{i},w)\prod_{j=1}^{d+1}p(w_{j}).
 \end{equation*}
-By changing products into sums in the exponential and taking $-\log$, it is not hard
+By changing products into sums in the exponenential and taking $-\log$, it is not hard
 to check that 
 \begin{equation*}
 -\log(p(w|D))=\frac{1}{2}\sum_{i=1}^{n}\frac{(y^{i}-w^{T}x^{i})^{2}}{\sigma_{i}^{2}}+
-\sum_{j=1}^{d}\frac{\lambda_{j}}{2}w_{j}^{2}.
+\sum_{j=1}^{d+1}\frac{\lambda_{j}^{2}}{2}w_{j}^{2}.
 \end{equation*}
 If we define $\Sigma=diag(\sigma_{1},\sigma_{2},\ldots,\sigma_{n})$ and
-$\Lambda=diag(\sqrt{\lambda_{1}},\ldots,\sqrt{\lambda_{d}})$ then the above equation can be written as
+$\Lambda=diag(\lambda_{1},\ldots,\lambda_{d+1})$ then the above equation can be written as
 \begin{equation*}
 -log(p(w|D)):=f(w)=\|\Sigma(Xw-y)\|_{2}^{2}+\|\Lambda w\|_{2}^{2}.
 \end{equation*}
@@ -378,7 +310,7 @@ y^{i}\sim\mathcal{P}(e^{w^{T}x^{i}}),\qquad w_{j}\sim\mathcal{N}(0,\frac{1}{\lam
 \end{equation*}
 In this case by taking $-\log$ in the expression
 \begin{equation*}
-p(w|D)\propto\prod_{i=1}^{n}p(y^{i}|x^{i},w)\prod_{j=1}^{d}p(w_{j}).
+p(w|D)\propto\prod_{i=1}^{n}p(y^{i}|x^{i},w)\prod_{j=1}^{d+1}p(w_{j}).
 \end{equation*}
 and recalling that $\mathcal{P}(y;\lambda)=\frac{\lambda^{y}e^{-\lambda}}{y!}$ we get
 \begin{equation*}
@@ -444,7 +376,7 @@ By setting $\sqrt{V}X=A$ and $\sqrt{V}y=b$ we can use equation (\ref{eqnnicenorm
 \begin{equation*}
 \nabla(\frac{1}{2}\|\sqrt{V}Xw-\sqrt{V}y)\|^{2})=((\sqrt{V}X)^{T}(\sqrt{V}X)w-(\sqrt{V}X)^{T}\sqrt{V}y),
 \end{equation*}
-Since $\sqrt{V}$ is symmetric then $\sqrt{V}^{T}\sqrt{V}=\sqrt{V}^{2}=V$, therefore 
+Since $\sqrt{V}$ is simmetric then $\sqrt{V}^{T}\sqrt{V}=\sqrt{V}^{2}=V$, therefore 
 \begin{equation*}
 \nabla(\frac{1}{2}\|\sqrt{V}Xw-\sqrt{V}y)\|^{2})=X^{T}VXw-X^{T}Vy.
 \end{equation*}
@@ -485,7 +417,7 @@ hence its Hessian is
 \begin{equation*}
 \nabla^{2} f=\frac{A+A^{T}}{2}.
 \end{equation*}
-Since $A$ is positive semi-definite, $A^{T}$ and $\nabla^{2} f$ are. Hence $f$ is convex.
+Since $A$ is possitive semi-definited, $A^{T}$ and $\nabla^{2} f$ are. Hence $f$ is convex.
 
 \subsubsection{Any norm}
 The domain of any norm is the whole space, hence is convex. On the other hand if $\lambda\in[0,1]$ and
@@ -508,7 +440,7 @@ Where $D$ is a diagonal matrix with elements
 \begin{equation*}
 D_{ii}=sgm(y_{i}w^{T}x_{i})sgm(-y_{i}w^{T}x_{i}).
 \end{equation*}
-Since the sigmoid function is positive we conclude that $D$ is positive definite hence the inner product
+Since the sigmoind function is positive we conclude that $D$ is positive definite hence the inner product
 \begin{equation*}
 a^{t}Db,
 \end{equation*}
@@ -535,7 +467,7 @@ and
 \begin{equation*}
 \lambda\|Aw\|_{q},
 \end{equation*}
-are composition of affine maps along with multiplication with a positive scalar, since any norm
+are composition of affine maps along with multtiplication with a positive scalar, since any norm
 is convex we conclude that the function (whose domain is the whole space)  
 \begin{equation*}
 f(w)=\|Xw-y\|_{p}+\lambda\|Aw\|_{q},
@@ -591,7 +523,7 @@ For the regression problem with SVM we are going to minimize the function
 f(w)=\sum_{i=1}^{n}\max\{0,|w^{T}x_{i}-y_{i}|-\epsilon\}.
 \end{equation*}
 
-We are going to convert this into a linear program. First we define the variables $r_{i}$ to be such that
+We are going to convert this into a linear program. first we define the variables $r_{i}$ to be such that
 \begin{equation*}
 r_{i}\geq |w^{T}x_{i}-y_{i}|-\epsilon,
 \end{equation*}
@@ -643,7 +575,7 @@ assess the performance under changes in how to pick the parameter alpha in the b
 
 \subsubsection{Reseting $alpha$ to $\alpha\leftarrow -\alpha\frac{v^{T}\nabla f(w)}{v^{T}v}$}
 In this case by reseting $\alpha$ as $\alpha\leftarrow -\alpha\frac{v^{T}\nabla f(w)}{v^{T}v}$ we
-have to possibilities, we can let the update of $\alpha$ to be the third order Hermite polynomial
+have to posibilities, we can let the update of $\alpha$ to be the third order Hermite polynomial
 interpolation or as before $\alpha\leftarrow\frac{\alpha}{2}$. We are going to examine both cases.
 
 \begin{itemize}
@@ -693,29 +625,9 @@ Cholesky factorization (Taking advantage of the convexity of the objective funct
 In this case we use the Matlab's built in function pcg to calculate the direction $d$ without
 explicitly forming the Hessian. By changing the findMin.m function in this way
 we get that the minimizer is found in 19.2 seconds. The structure of $w$ is relatively sparse
-with 2732 zero entries of the 47237 entries of the minimizer $w$. Finally The error observed by doing
-\begin{equation*}
-\sum_{i=1}^{20242}\mathbb{I}(y_{train}\neq sign(Xw))=432.
-\end{equation*}
-That is a training error of 2.13\% (see the script errorTrainHF.m).
+with 2732 zero entries of the 47237 entries of the minimizer $w$.
 
-\subsection{Multi-Class Logistic Regression}
-The loss function associated to the softmax probability is an scalar function
-$f:\underbrace{\mathbb{R}^{k}\times\ldots\times\mathbb{R}^{k}}_{\text{d times}}\rightarrow\mathbb{R}$.
-With gradient given by the $(d\times k)\times 1$ vector
-\begin{equation*}
-\nabla f(W)=[\nabla_{w_{1}} f(W)^{T}, \nabla_{w_{2}} f(W)^{T}, \ldots, \nabla_{w_{k}} f(W)^{T}]^{T},
-\end{equation*} 
-where after some tedious calculations we find
-\begin{equation*}
-\nabla_{w_{j}}f(W)^{T}=-\sum_{\{i|y^{i}=j\}}x^{i}+\sum_{i=1}^{n}\frac{e^{w_{j}^{T}x^{i}}}
-{\sum_{c'=1}^{k}e^{w_{c'}^{T}x^{i}}}x^{i}.
-\end{equation*}
-Implementing this gradient in the function softmaxClassifier.m and findMin.m we get the following result
-\begin{figure}[H]
-\includegraphics[scale=0.6]{./Q33/softmax}
-\caption{Classification result minimizing the loss function associated to the softmax probabilities.}
-\end{figure}
-The validation error was 2.8\%.
+
+
 
 \end{document}

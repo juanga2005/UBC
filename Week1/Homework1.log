@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2016.3.4)  15 JAN 2017 22:04
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2016.3.4)  17 JAN 2017 00:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -306,73 +306,89 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 32.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2004/09/05 1.3 listings language file
 ) [1
 
-{/usr/share/texlive/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
-<./Q12/RBFs1l1plot.jpg, id=26, 562.1pt x 421.575pt>
+{/usr/share/texlive/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5]
+<./Q12/RBFs1l1plot.jpg, id=32, 562.1pt x 421.575pt>
 File: ./Q12/RBFs1l1plot.jpg Graphic file (type jpg)
 
 <use ./Q12/RBFs1l1plot.jpg>
-Package pdftex.def Info: ./Q12/RBFs1l1plot.jpg used on input line 209.
+Package pdftex.def Info: ./Q12/RBFs1l1plot.jpg used on input line 241.
 (pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 216.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 248.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 216.
- [5 <./Q12/RBFs1l1plot.jpg>] [6] [7] [8] [9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 470--476
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 248.
+ [6 <./Q12/RBFs1l1plot.jpg>] <./Q12/errorcontour.jpg, id=36, 570.13pt x 411.537
+5pt>
+File: ./Q12/errorcontour.jpg Graphic file (type jpg)
+
+<use ./Q12/errorcontour.jpg>
+Package pdftex.def Info: ./Q12/errorcontour.jpg used on input line 308.
+(pdftex.def)             Requested size: 285.0643pt x 205.76825pt.
+ [7]
+<./Q12/RBFwCV.jpg, id=41, 570.13pt x 411.5375pt>
+File: ./Q12/RBFwCV.jpg Graphic file (type jpg)
+ <use ./Q12/RBFwCV.jpg>
+Package pdftex.def Info: ./Q12/RBFwCV.jpg used on input line 322.
+(pdftex.def)             Requested size: 285.0643pt x 205.76825pt.
+
+[8 <./Q12/errorcontour.jpg>] [9 <./Q12/RBFwCV.jpg>] [10] [11] [12] [13]
+Underfull \hbox (badness 10000) in paragraph at lines 522--528
 
  []
 
-[11] [12] [13] (./Q23/robustRegression.m [14])
-<./Q23/regressions.jpg, id=64, 562.1pt x 421.575pt>
+[14] [15] [16] <./Q23/regressions.jpg, id=72, 562.1pt x 421.575pt>
 File: ./Q23/regressions.jpg Graphic file (type jpg)
 
 <use ./Q23/regressions.jpg>
-Package pdftex.def Info: ./Q23/regressions.jpg used on input line 525.
+Package pdftex.def Info: ./Q23/regressions.jpg used on input line 575.
 (pdftex.def)             Requested size: 393.46732pt x 295.10048pt.
 
-Overfull \hbox (33.46732pt too wide) in paragraph at lines 525--526
+Overfull \hbox (33.46732pt too wide) in paragraph at lines 575--576
  [][] 
  []
 
-[15 <./Q23/regressions.jpg>] (./Q23/svRegression.m [16]) [17] [18] [19]
-(./Homework1.aux) ) 
+[17 <./Q23/regressions.jpg>] [18] [19] [20]
+<./Q33/softmax.jpg, id=86, 562.1pt x 421.575pt>
+File: ./Q33/softmax.jpg Graphic file (type jpg)
+ <use ./Q33/softmax.jpg>
+Package pdftex.def Info: ./Q33/softmax.jpg used on input line 716.
+(pdftex.def)             Requested size: 337.2626pt x 252.94695pt.
+
+[21 <./Q33/softmax.jpg>] (./Homework1.aux) ) 
 Here is how much of TeX's memory you used:
- 5610 strings out of 495063
- 80730 string characters out of 3182202
- 223694 words of memory out of 3000000
- 8705 multiletter control sequences out of 15000+200000
+ 4942 strings out of 495063
+ 73153 string characters out of 3182202
+ 127840 words of memory out of 3000000
+ 8044 multiletter control sequences out of 15000+200000
  11352 words of font info for 43 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 42i,9n,40p,267b,1979s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx
-12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-
-Output written on Homework1.pdf (19 pages, 265497 bytes).
+ 42i,9n,40p,294b,281s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/symbols/msbm10.pfb>
+Output written on Homework1.pdf (21 pages, 344150 bytes).
 PDF statistics:
- 132 PDF objects out of 1000 (max. 8388607)
- 92 compressed objects within 1 object stream
+ 141 PDF objects out of 1000 (max. 8388607)
+ 96 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

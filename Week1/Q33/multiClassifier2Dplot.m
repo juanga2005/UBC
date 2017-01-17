@@ -43,6 +43,8 @@ for c = 1:k
     h = plot(X(y==c,2),X(y==c,3),'b.');
     set(h,'Color',colors(c,:),'Marker',symbols{c});
 end
+title('Multi-class Classification Using Softmax Probabilities')
+
 end
 
 function [colors] = getColorsRGB()
