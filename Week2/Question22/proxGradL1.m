@@ -1,8 +1,8 @@
-function [w,f] = proxGradL1(funObj,w,lambda,maxIter)
+function [w,f] = proxGradL1(funObj,w,lambda,maxIter,varargin)
 % Minimize funOb(w) + lambda*sum(abs(w))
 
 % Evaluate initial objective and gradient of smooth part
-[f,g] = funObj(w);
+[f,g] = funObj(w,varargin{:});
 funEvals = 1;
 
 L = 1;
@@ -11,7 +11,7 @@ while funEvals < maxIter
     % proximal-gradient step
     alpha = 1/L;
     w_new = softThreshold(w - alpha*g,alpha*lambda);
-    [f_new,g_new] = funObj(w_new);  
+    [f_new,g_new] = funObj(w_new,varargin{:});  
     funEvals = funEvals + 1;
     
     % adaptive step-size
@@ -19,7 +19,7 @@ while funEvals < maxIter
         L = L*2;
         alpha = 1/L;
         w_new = softThreshold(w - alpha*g,alpha*lambda);
-        [f_new,g_new] = funObj(w_new);
+        [f_new,g_new] = funObj(w_new,varargin{:});
         funEvals = funEvals + 1;
     end
     

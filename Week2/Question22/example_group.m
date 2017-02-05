@@ -4,7 +4,7 @@ load groupData.mat
 
 lambda=10;
 
-model = softmaxClassifierL2(X,y,lambda);
+model = softmaxClassifierGL1(X,y,lambda);
 
 yhat = model.predict(model,X);
 errTrain = sum(yhat~=y)/length(y)

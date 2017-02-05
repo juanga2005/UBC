@@ -1,11 +1,11 @@
-function [model] = softmaxClassifier(X,y,lambda)
+function [model] = softmaxClassifier(X,y)
 
 % Compute sizes
 [n,d] = size(X);
 k = max(y);
 
 W = zeros(d,k); % Each column is a classifier
-W(:) = findMin(@softmaxLoss,W(:),500,1,X,y,k,lambda);
+W(:) = findMin(@softmaxLoss,W(:),500,1,X,y,k);
 
 model.W = W;
 model.predict = @predict;
@@ -16,7 +16,7 @@ W = model.W;
 [~,yhat] = max(X*W,[],2);
 end
 
-function [nll,g,H] = softmaxLoss(w,X,y,k,lambda)
+function [nll,g,H] = softmaxLoss(w,X,y,k)
 
 [n,p] = size(X);
 W = reshape(w,[p k]);
@@ -29,7 +29,7 @@ nll = -sum(XW(ind)-log(Z));
 
 g = zeros(p,k);
 for c = 1:k
-    g(:,c) = X'*(exp(XW(:,c))./Z-(y == c))+lambda*W(:,c);
+    g(:,c) = X'*(exp(XW(:,c))./Z-(y == c));
 end
 g = reshape(g,[p*k 1]);
 end
