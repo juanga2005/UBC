@@ -23,6 +23,8 @@ for t = 1:maxPasses*n
     
     % Take the stochastic gradient step
     w = w - alpha*g;
+	n
+	t
     
     if mod(t,n) == 0
         change = norm(w-w_old,inf);
