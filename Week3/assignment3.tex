@@ -41,6 +41,8 @@
 %%%My commands
 \newcommand{\p}{\mathbb{P}}
 \newcommand{\x}{\textbf{x}}
+\newcommand{\yy}{\tilde{y}^{i}}
+\newcommand{\xx}{\tilde{x}^{i}}
 
 
 
@@ -397,7 +399,7 @@ This says that $\mu$ has also Gaussian distribution. More explicitly
 
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Exercise 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Mixture Models and Expectation Maximization}
@@ -430,6 +432,60 @@ The function \emph{example\_Bernoulli} loads a binarized version of the MNIST da
 \item To address the problem that the average NLL is infinity, modify the \emph{densityBernoulli} function to implement Laplace smoothing based on an extra argument $\alpha$. \blu{Hand in the code and report the average NLL with $\alpha = 1$}.
 \item Write a new function implementing the mixture of Bernoullis model with Laplace smoothing of the $\theta$ values (note that Laplace smoothing only change the M-step). \blu{Hand in the code and report the average NLL with $\alpha = 1$ and $k=10$ for a particular run of the algorithm, as well as 4 samples from the model and 4 of the cluster images.}
 }
+
+\subsubsection*{Solution}
+\textbf{1}. From equation (**) in class notes we know that 
+\begin{equation}\label{eqnQ}
+Q(\Theta|\Theta^{t})=\sum_{i=1}^{n}\log(\p(y^{i},x^{i}|\Theta))+\sum_{i=1}^{t}\sum_{\tilde{y}_{i}}r^{i}_{\tilde{y}^{i}}\log(\p(\tilde{y}^{i},\tilde{x}^{i}|\Theta)).
+\end{equation}
+On the other hand using Bayes rule we have
+\begin{equation*}
+\log(\p(y^{i},x^{i}|\Theta))=\log(\p(x^{i}|y^{i},\Theta))+\log(\p(y^{i}|\Theta))+const.
+\end{equation*}
+By hypothesis $x^{i}|y^{i},\Theta\sim\mathcal{N}(\mu_{y^{i}},\Sigma_{y^{i}})$, and $\p(y^{i}|\Theta)=\frac{n_{y^{i}}}{n}$ where $n_{y^{i}}$ is the number of $y^{i}$ in the training sample. Hence we can write
+\begin{equation}\label{eqnfirstsummand}
+\log(\p(y^{i},x^{i}|\Theta))=\frac{1}{2}(x^{i}-\mu_{y^{i}})^{T}\Sigma_{y^{i}}^{-1}(x^{i}-\mu_{y^{i}})+\frac{1}{2}\log|\Sigma_{y^{i}}|+const.
+\end{equation}
+If we apply Bayes rule to the argument in the second summand in equation (\ref{eqnQ}) we get
+\begin{equation*}
+\log(\p(\yy,\xx|\Theta))=\log(\p(\xx|\yy,\Theta))+\log(\p(\yy|\Theta))+const.
+\end{equation*}
+As before $\xx|\yy,\Theta\sim\mathcal{N}(\mu_{\yy},\Sigma_{\\y})$ and by the class notes in EM we already  know that $\p(\yy|\Theta)=\frac{\sum_{i=1}^{t}r^{i}_{\yy}}{t}$. Hence we can write
+\begin{equation}\label{eqnsecondsummand}
+\log(\p(\yy,\xx|\Theta))=\frac{1}{2}(x^{i}-\yy)^{T}\Sigma_{\yy}^{-1}(\xx-\mu_{\yy})+\frac{1}{2}\log|\Sigma_{\yy}|+const.
+\end{equation}
+Combining equations (\ref{eqnfirstsummand}) and (\ref{eqnsecondsummand}) we conclude
+\begin{equation*}
+Q(\Theta|\Theta^{t})=\sum_{i=1}^{n}\frac{1}{2}(x^{i}-\mu_{y^{i}})^{T}\Sigma_{y^{i}}^{-1}(x^{i}-\mu_{y^{i}})+\frac{1}{2}\log|\Sigma_{y^{i}}|+
+\sum_{i=1}^{t}\sum_{\tilde{y}_{i}}r^{i}_{\\y}(\frac{1}{2}(\xx-\mu_{\yy})^{T}\Sigma_{\yy}^{-1}(\xx-\mu_{\yy})+\frac{1}{2}\log|\Sigma_{\yy}|)+const.
+\end{equation*}
+To find the update $\Theta^{t+1}$ we optimize with respect to the means and covariance matrices. First it is straightforward to check that for a class c
+\begin{equation*}
+\nabla_{\mu_{c}}Q(\Theta|\Theta^{t})=-\sum_{i\in y_{c}}\Sigma_{c}^{-1}(x^{i}-\mu_{c})-\sum_{i=1}^{t}r^{i}_{c}\Sigma_{c}^{-1}(\xx-\mu_{c}).
+\end{equation*}
+Equating to zero and solving for $\mu_{c}$ we find
+\begin{equation}\label{eqnmuoptimized}
+\mu_{c}=\frac{\sum_{i\in y_{c}}x^{i}+\sum_{i=1}^{t}r^{i}_{c}\xx}{n_{c}+\sum_{i=1}^{t}r^{i}_{c}}.
+\end{equation}
+Using the formulas for the gradient of the log-determinant and the trace as used in Question 1.2 we get
+\begin{equation*}
+\nabla_{\Sigma_{c}^{-1}}Q(\Theta|\Theta^{t})=\frac{1}{2}\sum_{i\in y_{c}}(x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}-\frac{n_{c}}{2}\Sigma_{c}+
+\frac{1}{2}\sum_{i=1}^{t}r^{i}_{c}(\xx-\mu_{c})(\xx-\mu_{c})^{T}-\frac{1}{2}\Sigma_{c}\sum_{i=1}^{t}r^{i}_{c}.
+\end{equation*}
+Equating to zero and solving for $\Sigma_{c}$ we get
+\begin{equation}\label{eqnSigmaoptimized}
+\Sigma_{c}=\frac{\sum_{i\in y_{c}}(x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}+\sum_{i=1}^{t}r^{i}_{c}(\xx-\mu_{c})(\xx-\mu_{c})^{T}}{n_{c}+\sum_{i=1}^{t}r^{i}_{c}}.
+\end{equation}
+Finally the optimization for a given class $c$  the optimal of  $\theta_{c}$ is given by
+\begin{equation}\label{eqnthetaoptimized}
+\theta_{c}=\frac{\sum_{i=1}^{t}r^{i}_{c}}{t}.
+\end{equation}
+By using the values in equations (\ref{eqnmuoptimized}), (\ref{eqnSigmaoptimized}) and $(\ref{eqnthetaoptimized})$  we obtain the update
+\begin{equation*}
+\Theta^{t+1}=\argmax_{\Theta}Q(\Theta|\Theta^{t}).
+\end{equation*}
+\newline
+\textbf{2}.
 
 
 
