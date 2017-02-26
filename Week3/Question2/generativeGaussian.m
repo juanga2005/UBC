@@ -49,7 +49,8 @@ function S=sigma(Xtrain,Ytrain,Mu,nClasses)
 	klasses=unique(Ytrain);
 
 	for k=1:nClasses
-		X=Xtrain(Ytrain==k,:);
+		X=Xtrain(Ytrain==k,:);[m,~]=size(X);
+		X=X-ones(m,1)*Mu(:,k)';
 		Nk=sum(Ytrain==klasses(k));	
 		S{k,1}=1/Nk*X'*X;
 	end
