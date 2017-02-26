@@ -3,7 +3,7 @@
 function model=generativeGaussianSSL(X,y,Xtilde)
 
 
-	niter=10; %Number of iterations
+	niter=20; %Number of iterations
 	%Number of classes
 	k=numel(unique(y));
 	%Dimensions
@@ -16,15 +16,17 @@ function model=generativeGaussianSSL(X,y,Xtilde)
 
 	%Initializing the parameters
 	for j=1:k
-		Sigmaold{1,j}=eye(d);
-		muold{1,j}=ones(1,d);
-		thetaold{1,j}=1/k;
+		nj=sum(y==j);
+		muold{1,j}=1/nj*sum(X);
+		aux=X'-repmat(muold{1,j}',1,n);
+		Sigmaold{1,j}=1/nj*aux*aux';
+		thetaold{1,j}=nj/n;
 	end
 
 	%Main loop
 	Theta=cell(1,3); %Stores all the parameters
 	for iteration=1:niter
-		R=create_r(Xtilde,y,Sigmaold,muold,thetaold);
+		R=update_R(Xtilde,y,Sigmaold,muold,thetaold);
 		munew=update_mu(X,Xtilde,y,R);
 		Sigmanew=update_sigma(X,Xtilde,y,R,munew);
 		thetanew=update_theta(Xtilde,y,R);
@@ -33,10 +35,10 @@ function model=generativeGaussianSSL(X,y,Xtilde)
 		muold=munew;
 		Sigmaold=Sigmanew;
 		thetaold=thetanew;
-		Theta{1,1}=munew;
-		Theta{1,2}=Sigmanew;
-		Theta{1,3}=thetanew;
 	end
+	Theta{1,1}=munew;
+	Theta{1,2}=Sigmanew;
+	Theta{1,3}=thetanew;
 	model.Theta=Theta;
 	model.predict=@predict;
 end
@@ -48,29 +50,42 @@ end
 
 
 
-function R=create_r(Xtilde,y,Sigmas,mus,thetas)
+function R=update_R(Xtilde,y,Sigmas,mus,thetas)
 	%Sigmas are the cov matrices
 	%mus are the means
 	%thetas are the theta parameters
 
 	%R_{ij}=r^{i}_{j}
-	[t,~]=size(Xtilde);
+	[t,d]=size(Xtilde);
 	k=numel(unique(y));	
-	likelihoods=zeros(k,t);
+	l=zeros(t,k);
 	prior=zeros(k,t);
-	for l=1:k
-		a=mvnpdf(Xtilde,mus{1,l},Sigmas{1,l});
-		if sum(a)==0
-			likelihoods(l,:)=0.5;
-		else
-			likelihoods(l,:)=a;
-		end
-		prior(l,:)=repmat(thetas{1,l},1,t);
+	aux=log(2*pi);
+	for c=1:k
+		S=Sigmas{1,c};
+		mu=mus{1,c};
+		theta=thetas{1,c};
+		U=chol(S);
+		aux=inv(U);
+		Sinv=aux'*aux;
+		num1=0.5*logdet(S);
+		num2=d/2*log(theta);
+		l(:,c)=diag(Xtilde*Sinv*Xtilde')+(num1+num2);
 	end
-	P=likelihoods.*prior; %P_{ij}=p(x^{j}|y_{i}=i,Theta)*p(y^{i}=i|Theta)
-	normalization_constants=sum(P);
-	aux=ones(k,1)*(1./normalization_constants);
-	R=P.*aux;
+	normalization_constant=logsumexp(l,2);
+	%Check the rest	
+	%for l=1:k
+	%	a=mvnpdf(Xtilde,mus{1,l},Sigmas{1,l});
+	%	if sum(a)==0
+	%		likelihoods(l,:)=1/t;
+	%	else %		likelihoods(l,:)=a;
+	%	end
+	%	prior(l,:)=repmat(thetas{1,l},1,t);
+	%end
+	%P=likelihoods.*prior; %P_{ij}=p(x^{j}|y_{i}=i,Theta)*p(y^{i}=i|Theta)
+	%normalization_constants=sum(P);
+	%aux=ones(k,1)*(1./normalization_constants);
+	%R=P.*aux;
 end
 
 function mu=update_mu(X,Xtilde,y,R);
@@ -79,7 +94,7 @@ function mu=update_mu(X,Xtilde,y,R);
 	mu=cell(1,k);
 	
 	aux=Xtilde'*R';%C-th column contains sums of the form sum(r^{i}_{c}*x^{i})
-	aux2=sum(R,2);
+	aux2=sum(R,2);%sum_{i}r^{i}_{c}
 	for j=1:k
 		nj=sum(y==j);
 		S1=sum(X(y==j,:));%Summand with label variables
@@ -105,13 +120,13 @@ function Sigma=update_sigma(X,Xtilde,y,R,mus);
 
 		
 		%First summand
-		aux=X-ones(n,1)*mus{1,j};
-		S1=aux'*aux;
+		aux=X'-repmat(mus{1,j}',1,n);
+		S1=aux*aux'; %%%Possible source of problems
 
 		%Second summand
-		aux3=R(j,:)'*ones(1,d);
-		aux4=Xtilde-ones(t,1)*mus{1,j};
-		S2=aux4'*(aux4.*aux3);
+		aux3=repmat(R(j,:)',1,d);
+		aux4=Xtilde'-repmat(mus{1,j}',1,t);
+		S2=aux4*(aux4'.*aux3);
 		
 		%Sigmaj
 		Sigma{1,j}=(S1+S2)/(nj+denom);
@@ -124,9 +139,21 @@ function thetas=update_theta(Xtilde,y,R);
 	k=numel(unique(y));
 	thetas=cell(1,k);
 	[t,d]=size(Xtilde);
+	n=length(y);
 	aux=sum(R,2);
 	for j=1:k
-		thetas{1,j}=aux(j)/t;
+		%nj=sum(y==j);
+		thetas{1,j}=aux(j)/(t);
+	end
+end
+
+function like=nll(Xtilde,mu,Sigma)
+
+	[t,~]=size(Xtilde);
+	like=zeros(t,1);
+	for j=1:t
+		xx=Xtilde(j,:)-mu;
+		like(j)=0.5*xx*inv(Sigma)*xx'+0.5*logdet(Sigma);
 	end
 end
 
@@ -142,11 +169,15 @@ function yhat=predict(model,Xtest)
 		mu=medias{1,j};
 		Sigmas=model.Theta{1,2};
 		Sigma=Sigmas{1,j};
-		prob(:,j)=mvnpdf(Xtest,mu,Sigma);
+		thetas=model.Theta{1,3};
+		theta=thetas{1,j};
+		prob(:,j)=nll(Xtest,mu,Sigma)-log(theta);
+		%pause();
+	
 	end	
 
 	%Getting the max probability
-	[ii,jj]=sort(prob,2,'descend');
+	[ii,jj]=sort(prob,2,'ascend');
 	yhat=jj(:,1);
 
 end

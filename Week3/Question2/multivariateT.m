@@ -24,18 +24,17 @@ while norm(mu-mu_old,'inf') > 1e-4
     funObj_dof = @(dof)NLL(X,mu,sigma,dof,3);
     dof = minFunc(funObj_dof,dof,options);
 end
-
 model.mu = mu;
 model.sigma = sigma;
 model.dof = dof;
 model.pdf = @pdf;
+model.NLL=@NLL;
 
 end
 
 
 function [lik] = pdf(model,X)
 mu = model.mu;
-display('pase por aqui')
 sigma = model.sigma;
 dof = model.dof;
 
