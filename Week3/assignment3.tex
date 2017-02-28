@@ -12,6 +12,7 @@
 \usepackage{graphicx}
 \usepackage{parskip}
 \usepackage{amssymb}
+\usepackage{float}
 \usepackage{listings} % For displaying code
 
 \begin{document}
@@ -43,12 +44,12 @@
 \newcommand{\x}{\textbf{x}}
 \newcommand{\yy}{\tilde{y}^{i}}
 \newcommand{\xx}{\tilde{x}^{i}}
-
+\newcommand{\kk}{1-\sum_{c\neq (k,k)}\theta_{c}}
 
 
 
 \title{CPSC 540 Assignment 3 (due February 27)}
-\author{Density Estimation and Project Proposal}
+\author{Juan Garcia}
 \date{}
 \maketitle
 
@@ -89,10 +90,12 @@ p(x^i | \Theta) = \prod_{c \in [k]^2}\theta_c^{\mathcal{I}[x^i = c]},
 \]
 where $c$ is a vector containing $(c_1,c_2)$, $[x^i = c]$ evaluates to 1 if all elements are equal, and $[k]^2$ is all ordered pairs $(c_1,c_2)$. You can use the Lagrangian to enforce the sum-to-1 constraint on the log-likelihood, and you may find it convenient to define $N_c = \sum_{i=1}^n \mathcal{I}[x^i = c]$.
 
-
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Exercise 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection*{Solution}
-\textbf{1}. Having $n$ training examples $\textbf{x}:=(x^{1},\ldots,x^{n})$ where $x^{i}\in\{1,2,\ldots,k\}^{2}$ with
+\textbf{1}. 
+\newline
+Having $n$ training examples $\textbf{x}:=(x^{1},\ldots,x^{n})$ where $x^{i}\in\{1,2,\ldots,k\}^{2}$ with
 \begin{equation*}
 \p(x_{1}^{i}=c_{1},x_{2}^{i}=c_{2})=\theta_{c1,c2}.
 \end{equation*}
@@ -106,9 +109,9 @@ By assuming independence between the variables we conclude
 =\prod_{i=1}^{n}\prod_{c\in[k]^{2}}\theta_{c}^{\mathcal{I}[x^{i}=c]}.
 \end{eqnarray*}
 Exchanging the order in the products and defining $N_c = \sum_{i=1}^n \mathcal{I}[x^i = c]$, we get
-\begin{equation*}
+\begin{equation}\label{eqnmle}
 \p(\x|\Theta)=\prod_{c\in[k]^{2}}\theta_{c}^{N_{c}}.
-\end{equation*}
+\end{equation}
 Since the logarithm is an increasing function, the maximizer of this equation is the same as the maximizer of 
 \begin{equation}\label{eqnloglikelihood}
 \log(\p(\x|\Theta))=\sum_{c\in[k]^{2}}N_{c}\log(\theta_{c}).
@@ -130,12 +133,38 @@ Hence the maximum likelihood estimation gives for each $l\in[k]^{2}$
 \begin{equation*}
 \theta_{l}=\frac{N_l}{\sum_{c\in[k]^{2}}N_c}.
 \end{equation*}
-\newline
+\newpage
 
-\textbf{2}.\textbf{Solve in a nicer way to exercise}
+\textbf{2}.
 \newline
+In this case by assuming $\theta_{k,k}=1-\sum_{c\neq (k,k)}\theta_{c}$ we modify equation (\ref{eqnmle}) to get
+\begin{equation*}
+\p(\x|\Theta)=(\kk)^{\alpha}\prod_{c\neq (k,k)}\theta_{c}^{N_{c}},
+\end{equation*}
+where $\alpha=n-\sum_{c\neq (k,k)}N_{c}$. By taking $\log$ on both sides of the equation, we obtain
+\begin{equation*}
+\log(\p(\x|\Theta))=\alpha\log(\kk)+\sum_{c\neq (k,k)}N_{c}\log(\theta_{c}).
+\end{equation*}
+By letting $c=(c1,c2)$ and taking the derivative with respect to $\theta_{mn}$ we get
+\begin{equation*}
+\frac{\partial}{\partial\theta_{mn}}(\log(\p(\x|\Theta)))=\frac{-\alpha\delta_{(m,n)(c_{1},c_{2})}\theta_{c_{1},c_{2}}}{1-\sum_{(c_{1},c_{2})\neq (k,k)}\theta_{c_1,c_2}}
++\sum_{(c_{1},c_{2})\neq (k,k)}\frac{N_{c}}{\theta_{c_{1},c_{2}}}\delta_{(m,n)(c_{1},c_{2})}.
+\end{equation*}
+Simplifying and equating to zero we obtain
+\begin{equation*}
+\frac{\alpha\theta_{m,n}}{\kk}-\frac{N_{m,n}}{\theta_{m,n}}=0.
+\end{equation*}
+If we define $A_{mn}=\sum_{c\neq (k,k),c\neq (m,n)}$ then we get
+\begin{equation*}
+\alpha\theta_{mn}^{2}+N_{mn}\theta_{mn}+N_{mn}(A_{mn}-1)=0.
+\end{equation*}
+With this we have $n\times m$ equations to solve for the $n\times m$ parameters. The solution gives us the vales of $\Theta$ for the MLE. Clearly is easier to use Lagrange Multipliers.
+\newpage
 
-\textbf{3}. We want to find the MAP for $\p(\Theta|\x)$ or $\log(\p(\Theta|\x))$. Using Bayes rule we get
+
+\textbf{3}. 
+\newline
+We want to find the MAP for $\p(\Theta|\x)$ or $\log(\p(\Theta|\x))$. Using Bayes rule we get
 \begin{equation*}
 \p(\Theta|\x)\propto\p(\x|\Theta)\p(\Theta).
 \end{equation*}
@@ -223,8 +252,11 @@ Unlike the previous case, we don't have a closed-form solution for the parameter
 Hints: you will be able to substantially simplify the notation in parts 1-3 if you use the notation $\sum_{i \in y_c}$ to mean the sum over all values $i$ where $y^i = c$. Similarly, you can use $n_c$ to denote the number of cases where $y_i = c$, so that we have $\sum_{i \in y_c}1 = n_c$. Note that the determinant of a diagonal matrix is the product of the diagonal entries, and the inverse of a diagonal matrix is a diagonal matrix with the reciprocals of the original matrix along the diagonal. For part three you can use the result from class regarding the MLE of a general multivariate Gaussian. You may find it helpful to use the included \emph{logdet.m} function to compute the log-determinant in more numerically-stable way.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Exercise 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \subsubsection*{Solution}
-\textbf{1}. Under the assumption that $\Sigma_{c}=D$ where $D$ diagonal, the negative log-likelihood becomes
+\textbf{1}. 
+\newline
+Under the assumption that $\Sigma_{c}=D$ where $D$ diagonal, the negative log-likelihood becomes
 \begin{equation*}
 - \log \p(X|y,\Theta)
  = \sum_{i=1}^n \frac{1}{2}(x^i - \mu_{y^i})^TD^{-1}(x^i - \mu_{y^i}) + \half\sum_{i=1}^n \log|D| + \text{const.}
@@ -264,9 +296,11 @@ Solving for $\lambda_{l}$ we conclude
 \lambda_{l}=\frac{1}{n}\sum_{i=1}^{n}(x^{i}-\mu_{y^{i}})^{2}_{l}.
 \end{equation*}
 This means that the best estimate for the $l$-th element in the diagonal of $D^{-1}$ is the estimate of the variance along the $l$-th coordinate direction.
-\newline
+\newpage
 
-\textbf{2}. Now we are going to assume that $\Sigma_{c}=\sigma_{c}I$. With this assumption the negative log-likelihood becomes
+\textbf{2}. 
+\newline
+Now we are going to assume that $\Sigma_{c}=\sigma_{c}I$. With this assumption the negative log-likelihood becomes
 \begin{equation*}
 - \log \p(X|y,\Theta)
  = \sum_{i=1}^n \frac{1}{2\sigma_{y^{i}}^{2}}\underbrace{(x^i - \mu_{y^i})^T(x^i - \mu_{y^i})}_{\|x^{i}-\mu_{y^{i}}\|^{2}_{2}} + \half\sum_{i=1}^n \log|\sigma_{y^{i}}^{2}I| + \text{const.}
@@ -288,8 +322,10 @@ Solving for $\sigma^{2}$ we conclude
 \sigma_{l}^{2}=\frac{\|x^{l}-\mu_{l}\|^{2}}{d}.
 \end{equation}
 This is the MLE estimate for the variances.
-
-\textbf{3}. Finally for the general case, the likelihood is 
+\newpage
+\textbf{3}. 
+\newline
+Finally for the general case, the likelihood is 
 \begin{equation*}
 -\log(\p(X|y,\Theta) = \sum_{i=1}^n \frac{1}{2}(x^i - \mu_{y^i})^T\Sigma_{y^i}^{-1}(x^i - \mu_{y^i}) + \half\sum_{i=1}^n \log|\Sigma_{y^i}| + \text{const.}
 \end{equation*}
@@ -304,11 +340,11 @@ Solving for $\mu_{c}$ we get the same result as in the two previous cases, namel
 \end{equation*}
 For the covariance, things are a little bit more tricky. First recall that given a matrix $A$ we have
 \begin{equation}\label{eqnlogtraceidentity}
-\frac{\partial}{\partial A}\log|A|=A^{-T}.
+\nabla_{A}\log|A|=A^{-T}.
 \end{equation}
 On the other hand we have for matrices $A$ and $B$
 \begin{equation*}
-\frac{\partial}{\partial A}tr(BA)=B^{T}.
+\nabla_{A}tr(BA)=B^{T}.
 \end{equation*}
 Since for any $c$ we have that $(x^{i}-\mu_{c})^{T}\Sigma_{c}^{-1}(x^{i}-\mu_{c})$ is a number then
 \begin{equation*}
@@ -316,7 +352,7 @@ tr((x^{i}-\mu_{c})^{T}\Sigma_{c}^{-1}(x^{i}-\mu_{c}))=tr((x^{i}-\mu_{c})(x^{i}-\
 \end{equation*}
 Hence
 \begin{equation*}
-\frac{\partial}{\partial\Sigma_{c}}(tr((x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}\sigma_{c}^{-1}))=(x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}.
+\nabla_{\Sigma_{c}^{-1}}(tr((x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}\sigma_{c}^{-1}))=(x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}.
 \end{equation*}
 Combining this result with equation (\ref{eqnlogtraceidentity}) we conclude
 \begin{equation*}
@@ -330,7 +366,33 @@ This gives the MLE for the covariance matrix of the $c$ class.
 \newline
 
 \textbf{4}.
-
+\newline
+Using the script generativeGaussian.m and running the script example$\_$Generative.m we get the following output
+\begin{verbatim}
+>> example_generative
+Gaussian Gen. Model. accuracy is 0.63
+\end{verbatim}
+That is, we have an accuracy of $63\%$ in the test set.
+\newline
+\textbf{5}.
+\newline
+Using the script generativeStudent.m and running the script example$\_$Generative.m we get the following output
+\begin{verbatim}
+>> example_generative
+Gaussian Gen. Model. accuracy is 0.63
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Fitting multivariate student T density model...
+Tdist Gen. Model. accuracy is 0.79
+\end{verbatim}
+In this case the accuracy is improved and we get $79\%$ of accuracy.
 
 
 \newpage
@@ -354,7 +416,7 @@ Hints: Use Bayes rule and use the $\propto$ sign to get rid of factors that don'
 Note that multiplying by factors that do not depend on $\mu$ within the exponent does not change the distribution. In this question you will want to complete the square to get the distribution on $\mu$, rather than $x$.
 You may find it easier to solve thie problem if you parameterize the Gaussians in terms of their `precision' parameters (e.g., $\lambda = 1/\sigma^2$, $\lambda_0 = 1/\gamma^2$) rather than their variances $\sigma^2$ and $\gamma^2$.
 
-
+\newpage
 \subsubsection*{Solution}
 By Bayes rule the posterior can be computed as
 \begin{equation*}
@@ -425,16 +487,11 @@ Hint: for the second question, although EM often leads to simple updates, implem
 
 
 
-\subsection{Mixture of Bernoullis}
-
-The function \emph{example\_Bernoulli} loads a binarized version of the MNIST dataset and fits a density model that uses an independent Bernoulli to model each feature. If the reports the average NLL on the test data and shows 4 samples generated from the model. Unfortunately, the test NLL is infinity and the samples look terrible.
-\enum{
-\item To address the problem that the average NLL is infinity, modify the \emph{densityBernoulli} function to implement Laplace smoothing based on an extra argument $\alpha$. \blu{Hand in the code and report the average NLL with $\alpha = 1$}.
-\item Write a new function implementing the mixture of Bernoullis model with Laplace smoothing of the $\theta$ values (note that Laplace smoothing only change the M-step). \blu{Hand in the code and report the average NLL with $\alpha = 1$ and $k=10$ for a particular run of the algorithm, as well as 4 samples from the model and 4 of the cluster images.}
-}
-
+\newpage
 \subsubsection*{Solution}
-\textbf{1}. From equation (**) in class notes we know that 
+\textbf{1.1}. 
+\newline
+From equation (**) in class notes we know that 
 \begin{equation}\label{eqnQ}
 Q(\Theta|\Theta^{t})=\sum_{i=1}^{n}\log(\p(y^{i},x^{i}|\Theta))+\sum_{i=1}^{t}\sum_{\tilde{y}_{i}}r^{i}_{\tilde{y}^{i}}\log(\p(\tilde{y}^{i},\tilde{x}^{i}|\Theta)).
 \end{equation}
@@ -477,15 +534,226 @@ Equating to zero and solving for $\Sigma_{c}$ we get
 \Sigma_{c}=\frac{\sum_{i\in y_{c}}(x^{i}-\mu_{c})(x^{i}-\mu_{c})^{T}+\sum_{i=1}^{t}r^{i}_{c}(\xx-\mu_{c})(\xx-\mu_{c})^{T}}{n_{c}+\sum_{i=1}^{t}r^{i}_{c}}.
 \end{equation}
 Finally the optimization for a given class $c$  the optimal of  $\theta_{c}$ is given by
-\begin{equation}\label{eqnthetaoptimized}
-\theta_{c}=\frac{\sum_{i=1}^{t}r^{i}_{c}}{t}.
+\begin{equation}\label{eqnthetaoptimized} \theta_{c}=\frac{n_{c}+\sum_{i=1}^{t}r^{i}_{c}}{n+t}.
 \end{equation}
 By using the values in equations (\ref{eqnmuoptimized}), (\ref{eqnSigmaoptimized}) and $(\ref{eqnthetaoptimized})$  we obtain the update
 \begin{equation*}
 \Theta^{t+1}=\argmax_{\Theta}Q(\Theta|\Theta^{t}).
 \end{equation*}
+\newpage
+\textbf{1.2}. 
 \newline
-\textbf{2}.
+By using the script generativeGaussianSSL.m and runing the script example$\_$SSL.m we get the folowing output after $10$ iterations in the $EM$ algorithm
+\begin{verbatim}
+>> example_SSL
+KNN accuracy is 0.28
+Gaussian Gen. Model. accuracy is 0.49
+SSL Gauss. Gen. Model. accuracy is 0.75
+\end{verbatim}
+
+So we can see that for the semi-supervised learning setting, working with hidden variables gives better performance.
+\newline
+
+\textbf{1.3}
+\newline
+Using the script generativeGaussianSSLHard.m we get after 7 iterations the following result
+\begin{verbatim}
+>> example_SSL      
+SSL Gauss. Gen. Model. accuracy is 0.75
+The time to run generativeGaussSSL is: Elapsed time is 6.322742 seconds.
+SSL HARD Gauss. Gen. Model. accuracy is 0.75
+The time to run generativeGaussHard is: Elapsed time is 3.704242 seconds.
+\end{verbatim}
+So not only we saved 5 iterations by doing hard EM, we also reduced time of computation almost by half, to get the same accuracy.
+
+
+\newpage
+
+
+\subsection{Mixture of Bernoullis}
+
+The function \emph{example\_Bernoulli} loads a binarized version of the MNIST dataset and fits a density model that uses an independent Bernoulli to model each feature. If the reports the average NLL on the test data and shows 4 samples generated from the model. Unfortunately, the test NLL is infinity and the samples look terrible.
+\enum{
+\item To address the problem that the average NLL is infinity, modify the \emph{densityBernoulli} function to implement Laplace smoothing based on an extra argument $\alpha$. \blu{Hand in the code and report the average NLL with $\alpha = 1$}.
+\item Write a new function implementing the mixture of Bernoullis model with Laplace smoothing of the $\theta$ values (note that Laplace smoothing only change the M-step). \blu{Hand in the code and report the average NLL with $\alpha = 1$ and $k=10$ for a particular run of the algorithm, as well as 4 samples from the model and 4 of the cluster images.}
+}
+\newpage
+\subsubsection*{Solutions:}
+\textbf{2.1}.
+\newline
+By modifying the script densityBernoulli.m to use Laplace smoothing ,i.e.  $\alpha-1=1$, we get the following output when we run the script example$\_$Bernoulli.m
+\begin{verbatim}
+>> example_Bernoulli
+
+averageNLL =
+
+  205.8471
+\end{verbatim}
+So with Laplace smoothing the NLL is now finite.
+\newline
+
+\textbf{2.2}
+\newline
+In this case we assume a model for the $i$-th sample of the form
+\begin{equation*}
+\p(x^{i}|\Theta)=\sum_{c=1}^{10}\pi_{c}\p(x^{i}|\theta_{c}),
+\end{equation*}
+where 
+\begin{equation*}
+\Theta=(\theta,\pi).	
+\end{equation*}
+Here $\theta$ is a $10\times 784$ matrix that contains all the parameters in the Bernoulli model and $\pi$ is 
+a vector that contains $\pi_{1},\pi_{2},\ldots,\pi_{10}$.
+For each component we assume independence to get 
+\begin{equation*}
+\p(x^{i}|\theta_{c})=\prod_{j=1}^{728}\p(x^{i}_{j}|\theta_{cj}),
+\end{equation*}
+and
+\begin{equation*}
+\p(x^{i}_{j}|\theta_{cj})=\theta_{cj}^{x^{i}_{j}}(1-\theta_{cj})^{1-x^{i}_{j}}.
+\end{equation*}
+Finally we assume $10$ hidden variables with prior probabilities 
+\begin{equation*}
+\p(z^{i}=c|\Theta)=\pi_{c}.
+\end{equation*}
+With this we calculate the function $Q(\Theta|\Theta^{t})$ and maximize it in order to find the update $\Theta^{t+1}$. After doing
+some thedious algebra we get that the maximum of $Q(\Theta|\Theta^{t})$ we need to choose that parameters as
+\begin{equation*}
+\theta_{cl}=\frac{\sum_{i=1}^{n}r^{i}_{l}x^{i}_{m}}{\sum_{i=1}^{n} r^{i}_{l}},
+\end{equation*}
+and
+\begin{equation*}
+\pi_{c}=\frac{\sum_{i=1}^{n}r^{i}_{c}+1}{n+2},
+\end{equation*}
+where in the last line we used Laplace smoothing. With this update scheme we apply $EM$ to optimize the likelihood $\p(x^{i}|\Theta)$ and apply it to the MNIST data set.
+The average negative log-likelihood was
+\begin{verbatim}
+mple_mixtureBernoulli
+
+averageNLL =
+
+  166.5713
+\end{verbatim}
+
+
+
+Below are shown 4 samples from the model using the script mixtureBernoulli.m and example$\_$mixtureBernoulli.m.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.2]{samples}
+\caption{Four Samples from the Bernoulli Model}
+\end{figure}
+
+
+Below it is shown a sample for each one of the 10 clusters.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.30]{cluster}
+\caption{Samples for each of the ten clusters}
+\end{figure} 
+
+\newpage
+\center{\section*{Project Proposal}}
+
+%%%% Assignment Specific Stuff %%%%
+\center{
+\textbf{\title{Applications of Machine Learning to Stock Market Predictions}}
+\newline
+\author{Anson Wong, Gudbrand Duff Morris and Juan Garcia}
+}
+%\date{}
+
+%\section{}
+%\subsection{}
+\flushleft
+\section*{Introduction}
+
+We propose to undertake an exploratory project on the potential impact of machine learning techniques to stock market prediction and analysis. 
+
+The idea of using algorithms to predict the price of assets is as old as the stock exchange itself, and the existing body of work on the subject is huge. Therefore, \textbf
+{the first part of our project will be an extensive literature review}. We will read and share interesting papers, using our findings to guide the development of the project scope and details.
+\newline
+Each one of the participants in this project have a possible idea in what direction this project could go:
+
+\blu{Gudbrand's driving question:} With the dawn of the Era of Big Data upon us, I seek to discover if and how a "change in magnitude will produce a change in kind".
+
+\blu{Anson's asks:} With the lack of insider information for amateur traders and the rise of algorithmic traders in the current stock market, is trading a lost cause for you and I? If not, then could an amateur machine learnist take a stab at trading and forecast price action with high success probability? I believe this is possible to earn large gains in nich\'{e} markets using a healthy amount of machine learning and understanding of human psychology. We plan to explore reinforcement learning and feature selection to achieve such a goal.
+
+\blu{Juan's Idea:} A machine can perform better than a human in a wide range of situations. Forecasting and detecting patterns in the time series in the stock market could be one of these situations.
+My idea is that with the techniques and ideas we are learning, we can teach a machine how to recognize what a good investment is. The criteria to define `good' comes from our knowledge 
+from stock markets after doing some literature review. For the moment my first though in that direction is to apply the classification techniques we are learning,  in order to select the portfolio
+with less variance. In this case the concept of `good' investment is `safe' investment.
+\newline
+
+Our literature research so far  is summarized below
+\section*{Literature Review}
+
+
+Papers: 
+\begin{itemize}
+\item http://www-stat.wharton.upenn.edu/~steele/Courses/434/434Context/EfficientMarket/AndyLoJPM2004.pdf
+
+\item http://www-stat.wharton.upenn.edu/~steele/Courses/434/434Context/EfficientMarket/Granger-stockmarket.pdf
+
+\end{itemize}
+
+Interesting/useful links
+\begin{itemize}
+\item This guy is pretty great: \url{http://www-stat.wharton.upenn.edu/~steele/}
+\item \url{https://www.udacity.com/course/machine-learning-for-trading--ud501}
+\item \url{https://www.quantopian.com/posts/simple-machine-learning-example}
+\item \url{http://www.qminitiative.org/UserFiles/files/S_Cl\%C3\%A9men\%C3\%A7on_ML.pdf}
+\item \url{http://www-stat.wharton.upenn.edu/~steele/Courses/9xx/Resources/MLFinancialApplications/MLFinance.html}
+\item \url{https://www.quora.com/How-do-financial-companies-use-machine-learning}
+\item \url{http://techemergence.com/machine-learning-in-finance-applications/}
+\item Our GoogleDrive: \url{https://drive.google.com/drive/folders/0B5_P6FZEZzQxOEN6ZTU1Q1czQTQ?usp=sharing}
+\item R package for financial analysis: \url{https://cran.r-project.org/web/views/Finance.html}
+
+
+\end{itemize}
+
+\section*{Applications/Implementations/Ideas}
+
+As the famous Oscar Wilde quote goes; "A cynic is a man who knows the price of everything but the value of nothing". In this sense, a ML model can be regarded as the ultimate cynic. The cynic has both advantages and disadvantages compared with the expert investor. With this in mind we have a set of potential topics/ideas to start with:
+
+\begin{description}
+
+\item[Predictability] How hard is the problem? Almost a philosophical question. 
+
+\item[Clustering] What sort of stocks/bonds/instruments are there? Which models work for different categories?
+
+\item[Feature Selection] Which features are important when it comes to prediction? We see many examples of seemingly godly predictions made based on the most complex features. Is this sort of 'thinking' possible for machines? Take for example the fictional Silicon Valley investor Peter Gregory, who reasons from the popularity of Burger King to the impending surge in periodic cicadas to Indonesian sesame futures. Or hedge fund manager Micheal Burry, one of the few big shot investors to recognize the subprime mortgage crisis long before it happened, just by analyzing the right data.
+
+\item[Prediction techniques] How can we predict the behaviour of a stochastic PDE (Black Scholes')? 
+
+\item[Momentum Investing] Gradient step based on today's winners. A potential winning strategy.
+
+\item[Page Rank] Page rank is particularly useful for ranking connections (whether it be for search results, biological systems, social media influence). Although it might be a stretch, 
+are there ways to use Page Rank to shed light on how the stock market works? 
+
+\item[Q-learning] A method of reinforcement learning which sets up a reward system, and uses a mix of exploration and exploitation to achieve optimization of a goal. Planning to apply this to create a trading monkey.
+
+\item[Financial Background] The introduction should get the reader up to date on the subject. Efficient markets, price, information, volatility, portfolio, ...
+
+\item[Portfolio Selection] Real-time optimization++
+
+\end{description}
+Finally we consider some technical aspects regarding data sets and software.
+
+
+\section*{Other}
+
+\begin{itemize}
+
+\item Datasets: There are plenty of sites were time series for the stock market can be accesed, such as, Finviz.com, Google Finance, Yahoo Finance, MarketWatch, to name a few. 
+
+\item Programing Language and Packages: Any high level programing can be use to do the data analysis. At this point in the project there is some preference for $R$ 
+and the financial analysis packages such as Empirical Finance. This is since there
+is familiarity from the members of this research group with this language. 
+
+\end{itemize}
+
+\end{document} 
 
 
 
