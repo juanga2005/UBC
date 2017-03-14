@@ -6,7 +6,6 @@ function [model] = binaryTabular(X,y,alpha)
 
 % Find unique rows and their indices
 [rows,~,ind] = unique([X y],'rows');
-ind
 % Store frequency of each unique row
 counts = histc(ind,1:max(ind));
 
@@ -34,6 +33,7 @@ if isempty(ind)
 else
     p1 = alpha + counts(ind);
 end
-p1/(p0+p1)
+%p=[p0/(p0+p1) p1/(p0+p1)];
+
 ysample = rand < p1/(p0+p1);
 end

@@ -1,15 +1,43 @@
 %Function to create the model with 8 or 15 parents
 function model=modelCreator(X,ind,numberofParents)
-		%X is a dxdxt array
-		%What is left to be done is to calculate probabilities for each 
-		%pixel.	
+	%X is a dxdxt array
 
+	n=size(X,3);
+	
+	subM=subMatrix(X,ind,numberofParents);
+	M=max(size(subM,1),size(subM,2));
+	m=min(size(subM,1),size(subM,2));
+	aux=M*m; %Size of each submatrix
+	
+	allData=subM(:);
+	allData=reshape(allData,n,aux);
+	%splitting parents and kid	
+	model.child=allData(:,aux); %Value of the pixel
+	model.parents=allData(:,1:(end-1)); %value of the parents.
+
+	tempModel=binaryTabular(model.parents,model.child,1);
+	model.parents=tempModel.rows(:,1:(end-1)); %realization of parents
+	model.childs=tempModel.rows(:,end);
+	model.sample=@sample;
+	model.tempModel=tempModel;
+	model.subMatrix=@subMatrix;
+	
+	
+
+
+end	
+		
+		
+function ysample=sample(model,xhat)
+	s=model.tempModel;
+	ysample=s.sample(s,xhat);
+end	
 
 
 
 
 function subM=subMatrix(X,ind,numberofParents)
-	%X is the matrix with the image
+	%X is the array with all the images size dxdxt
 	%ind are the index [i j] where we want to create the model of
 	%numberofParents can be 8 or 15
 	
@@ -36,7 +64,7 @@ function subM=subMatrix(X,ind,numberofParents)
 		else 	
 			y=ind(2)-2;
 		end	
-		subseting=X(x:ind(1),y:ind(2));
+		subM=X(x:ind(1),y:ind(2),:);
 
 	%%%%%%%%%%%%%%Number of parents 15 %%%%%%%%%%%%%%%%%%%%	
 	elseif numberofParents==15
@@ -67,7 +95,7 @@ function subM=subMatrix(X,ind,numberofParents)
 		else
 			y=ind(2)-3;
 		end
-		subseting=X(x:ind(1),y:ind(2));
+		subM=X(x:ind(1),y:ind(2),:);
 	else
 		error('numberofParents has to be 8 or 15')
 	end
