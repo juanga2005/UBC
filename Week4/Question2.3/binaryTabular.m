@@ -6,7 +6,7 @@ function [model] = binaryTabular(X,y,alpha)
 
 % Find unique rows and their indices
 [rows,~,ind] = unique([X y],'rows');
-
+ind
 % Store frequency of each unique row
 counts = histc(ind,1:max(ind));
 

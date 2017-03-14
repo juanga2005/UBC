@@ -7,6 +7,7 @@
 function samples=sampleDiscrete(p0,n)
 	%p0 is the probability of each value
 	%n is the number of samples
+	
 	%Storing the probabilities	
 	probs=cumsum(p0);
 	%Generating the samples
