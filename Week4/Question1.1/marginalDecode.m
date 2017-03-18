@@ -1,6 +1,6 @@
 %Function to maximize the marginals.
 
-function seq=marginalDecoding(p0,pT)
+function seq=marginalDecode(p0,pT)
 
 	d=size(pT,3);
 	M=zeros(2,d); %Stores the values of the marginals

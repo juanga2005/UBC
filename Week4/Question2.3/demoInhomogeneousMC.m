@@ -45,6 +45,7 @@ end
 % Fill-in some random test images
 t = size(Xtest,3);
 figure(1)
+title('Inhomogeneous Markov Chain Model');
 test=0;
 for image = 1:4
     subplot(2,2,image);
