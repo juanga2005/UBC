@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2016.3.4)  18 MAR 2017 20:28
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2016.3.4)  21 MAR 2017 01:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -260,12 +260,12 @@ e
 ))
 \c@lstlisting=\count115
 Package color Info: Redefining color red on input line 23.
-LaTeX Font Info:    Try loading font information for U+msa on input line 45.
+LaTeX Font Info:    Try loading font information for U+msa on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 45.
+LaTeX Font Info:    Try loading font information for U+msb on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -273,73 +273,159 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2004/09/05 1.3 listings language file
 )
-Underfull \hbox (badness 10000) in paragraph at lines 83--89
+Underfull \hbox (badness 10000) in paragraph at lines 86--92
 
  []
 
 (./Question1.1/marginalCalculation.m [1
 
 {/usr/share/texlive/texmf/fonts/map/pdftex/updmap/pdftex.map}]) [2]
-Underfull \hbox (badness 10000) in paragraph at lines 165--167
+Underfull \hbox (badness 10000) in paragraph at lines 168--170
 
  []
 
 [3] [4] [5] [6] [7] (./Question1.2/sampleReject.m) [8] [9] [10] [11] [12]
-Overfull \hbox (26.9954pt too wide) in paragraph at lines 647--647
+[13] [14]
+Overfull \hbox (26.9954pt too wide) in paragraph at lines 759--759
 [] 
  []
 
-[13] <inhomogeneousMC.jpg, id=64, 562.1pt x 421.575pt>
+[15] [16] [17] <inhomogeneousMC.jpg, id=78, 562.1pt x 421.575pt>
 File: inhomogeneousMC.jpg Graphic file (type jpg)
 
 <use inhomogeneousMC.jpg>
-Package pdftex.def Info: inhomogeneousMC.jpg used on input line 676.
+Package pdftex.def Info: inhomogeneousMC.jpg used on input line 890.
 (pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
- <DAG8.jpg, id=65, 562.1pt x 421.575pt>
+ [18] <DAG8.jpg, id=82, 562.1pt x 421.575pt>
 File: DAG8.jpg Graphic file (type jpg)
 
 <use DAG8.jpg>
-Package pdftex.def Info: DAG8.jpg used on input line 688.
+Package pdftex.def Info: DAG8.jpg used on input line 902.
 (pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
- [14 <./inhomogeneousMC.jpg>]
-<DAG15.jpg, id=69, 572.1375pt x 423.5825pt>
+ <DAG15.jpg, id=83, 572.1375pt x 423.5825pt>
 File: DAG15.jpg Graphic file (type jpg)
  <use DAG15.jpg>
-Package pdftex.def Info: DAG15.jpg used on input line 696.
+Package pdftex.def Info: DAG15.jpg used on input line 910.
 (pdftex.def)             Requested size: 286.06804pt x 211.79073pt.
- [15 <./DAG8.jpg> <./DAG15.jpg>] [16] (./Assn4.aux) ) 
+
+[19 <./inhomogeneousMC.jpg> <./DAG8.jpg>]
+Overfull \hbox (5.12158pt too wide) detected at line 925
+\U/msb/m/n/10 P\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x[] \OT1/cmr/m/n/10 = 1\OML/cm
+m/m/it/10 ; x[]; [] ; x[] \OT1/cmr/m/n/10 = 1) = [] [] \OML/cmm/m/it/10 :
+ []
+
+<sigmoid.jpg, id=88, 554.07pt x 431.6125pt>
+File: sigmoid.jpg Graphic file (type jpg)
+ <use sigmoid.jpg>
+Package pdftex.def Info: sigmoid.jpg used on input line 934.
+(pdftex.def)             Requested size: 277.03432pt x 215.80571pt.
+ [20 <./DAG15.jpg>] [21 <./sigmoid.jpg>]
+Overfull \hbox (39.49054pt too wide) in paragraph at lines 946--946
+[]\OT1/cmtt/m/n/10 [2] Tsai, C. F., and S. P. Wang. "Stock price forecasting by
+ hybrid machine learning techniques."[] 
+ []
+
+
+Overfull \hbox (7.99081pt too wide) in paragraph at lines 954--954
+[]\OT1/cmtt/m/n/10 [4] Yoo, Paul D., Maria H. Kim, and Tony Jan. "Machine learn
+ing techniques and use of event[] 
+ []
+
+
+Overfull \hbox (23.74068pt too wide) in paragraph at lines 960--960
+[]\OT1/cmtt/m/n/10 [5] Hassan, Md Rafiul, and Baikunth Nath. "Stock market fore
+casting using hidden Markov model:[] 
+ []
+
+
+Overfull \hbox (23.74068pt too wide) in paragraph at lines 964--964
+[]\OT1/cmtt/m/n/10 [6] Oh, Kyong Joo, Tae Yoon Kim, and Sungky Min. "Using gene
+tic algorithm to support portfolio[] 
+ []
+
+
+Overfull \hbox (28.99063pt too wide) in paragraph at lines 965--965
+[]\OT1/cmtt/m/n/10 optimization for index fund management." Expert Systems with
+ Applications 28.2 (2005): 371-379.[] 
+ []
+
+
+Overfull \hbox (34.24059pt too wide) in paragraph at lines 967--967
+[]\OT1/cmtt/m/n/10 [7]Freitas, Fabio D., Alberto F. De Souza, and Ailson R. de 
+Almeida. "Prediction-based portfolio[] 
+ []
+
+
+Overfull \hbox (34.24059pt too wide) in paragraph at lines 970--970
+[]\OT1/cmtt/m/n/10 [8] Milosevic, Nikola. "Equity forecast: Predicting long ter
+m stock price movement using machine[] 
+ []
+
+
+Overfull \hbox (39.49054pt too wide) in paragraph at lines 973--973
+[]\OT1/cmtt/m/n/10 [9] Gabaix, Xavier, et al. "A theory of power-law distributi
+ons in financial market fluctuations"[] 
+ []
+
+
+Overfull \hbox (34.24059pt too wide) in paragraph at lines 976--976
+[]\OT1/cmtt/m/n/10 [10] Oliveira, Nuno, Paulo Cortez, and Nelson Areal. "The im
+pact of microblogging data for stock[] 
+ []
+
+
+Overfull \hbox (2.74086pt too wide) in paragraph at lines 977--977
+[]\OT1/cmtt/m/n/10 market prediction: Using Twitter to predict returns, volatil
+ity, trading volume and survey[] 
+ []
+
+[22]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 995.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 995.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1009--1017
+
+ []
+
+[23] (./Assn4.aux) ) 
 Here is how much of TeX's memory you used:
- 4515 strings out of 495063
- 60384 string characters out of 3182202
- 191397 words of memory out of 3000000
- 7617 multiletter control sequences out of 15000+200000
+ 4542 strings out of 495063
+ 60799 string characters out of 3182202
+ 192444 words of memory out of 3000000
+ 7640 multiletter control sequences out of 15000+200000
  12017 words of font info for 47 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,10n,40p,878b,1979s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-i10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
->
-Output written on Assn4.pdf (16 pages, 329831 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
+x12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/symbols/msbm7.pfb>
+Output written on Assn4.pdf (23 pages, 392538 bytes).
 PDF statistics:
- 139 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
+ 171 PDF objects out of 1000 (max. 8388607)
+ 118 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
