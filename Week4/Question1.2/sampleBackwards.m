@@ -7,6 +7,14 @@ function X=sampleBackwards(p0,pT,n)
 	k=size(p0); %Number of different states
 	X=zeros(n,d);	
 
+
+	%Inverting the kernel
+
+	pT=transitionInvert(p0,pT);
+
+
+
+
 	X(:,d)=1;
 	for j=(d-1):-1:1
 		pos1=find(X(:,j+1)==1);
@@ -18,3 +26,16 @@ function X=sampleBackwards(p0,pT,n)
 	end
 end
 
+
+function pTinv=transitionInvert(p0,pT)
+	%Inverting the kernel
+
+	M=marginalCK(p0,pT);
+	M=M';
+	d=size(pT,3);
+	pTinv=zeros(size(pT));
+	pT=permute(pT,[2 1 3]);
+	for j=1:(d-1)
+		pTinv(:,:,j)=pT(:,:,j).*repmat(M(j,:),2,1)./repmat(M(j+1,:)',1,2);
+	end
+end	

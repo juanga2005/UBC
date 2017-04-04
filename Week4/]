@@ -91,7 +91,7 @@ shown below.
 \newline
 \lstinputlisting{./Question1.1/marginalCalculation.m}
 
-The output obtained by running the above script is the following
+The output obtained by runing the above script is the follwing
 \begin{verbatim}
 >>marginalCalculation
 
@@ -174,7 +174,7 @@ Now we proceed to maximize the marginals, i.e. we calculate
 \begin{equation*}
 \max_{x_{1},\ldots,x_{30}}\p(x_{1})\ldots\p(x_{30}).
 \end{equation*} 
-To calculate this quantity we used the script marginalDecode.m. The output obtained shows the most likely chain given the maximization problem stated above
+To calculate this quatity we used the script marginalDecode.m. The output obtained shows the most likely chain given the maximization problem stated above
 \begin{verbatim}
 >>marginalDecode(p0,pT_long)
 
@@ -256,7 +256,7 @@ Next consider the following cases (which require implementing an extra rejection
 \textbf{1 and 2}
 \newline
 Using the script sampleAncestral.m and using the initial probability $p0$ as $p0=[1,0]$ we produce a $10000$ samples from the Model where
-every chain starts at $x_{1}=1$. With these samples we do a  Monte Carlo integration to approximate the marginals. Using the same
+every chain starts at $x_{1}=1$. With these sampeles we do a  Monte Carlo integration to approximate the marignals. Using the same
 initial probability $p0$ we use the script marginalCK.m to calculate the exact conditional marginals. Below we show the results
 obtained from the Monte Carlo approximation and the exact calculation of the marginals,
  where as before the $j-th$ row
@@ -362,7 +362,7 @@ ans =
 
 \textbf{4.}
 \newline
-To calculate the sequence with highest probability starting with $x_{d}=1$ we change the transition probability matrix
+To calculate the sequence with highest probability starting with $x_{d}=1$ we change the trasition probability matrix
 $p_{ij}=p(x_{30}=j|x_{29}=i)$ from the value
 \begin{equation*}
 pT\_long(:,:,29)=\mat{
@@ -377,7 +377,7 @@ pT\_long(:,:,29)=\mat{
 0 & 1
 }
 \end{equation*}
-With this new value from the transition probability, we can guarantee that regardless the value of $x_{29}$ is, we get $x_{30}=1$
+With this new value from the transition probability, we can guarantee that regardles the value of $x_{29}$ is, we get $x_{30}=1$
 with probability 1. With this we get that the sequence with highest probability ending in 1 is
 \begin{verbatim}
 >>question12
@@ -460,52 +460,48 @@ ans =
 Now we obtain the conditional marginals $p(x_{j}|x_{30}=1)$ using backward sampling. In order to do backward sampling we need to know
 probabilities of the form $\p(x_{i}|x_{i+1})$. Since we know all probabilities of the form $\p(x_{i+1}|x_{i})$ we can calculate
 \begin{equation*}
-\p(x_{i}|x_{i+1})=\frac{\p(x_{i+1}|x_{i})\p(x_{i})}{\p(x_{i+1}}
+\p(x_{i}|x_{i+1})=\frac{\p(x_{i+1}|x_{i})\p(x_{i})}{\sum_{x_{i}}\p(x_{i+1}|x_{i})\p(x_{i})}
 \end{equation*}
-we calculate the marginals using the script marginalCK.m used before in part 2 exercise 1.1. After having found the transition
-probabilities from future to past we sample chains that $\p(x_{30}=1)=1$ we sampled from each term in the product given by
-\begin{equation*}
-\p(x_{30}=1,x_{29},\ldots,x_{1})=\prod_{j=1}^{29}\p(x_{30-j}|x_{31-j})
-\end{equation*}
-To implement this samples, we used the script
-sampleBackwards.m. Then we estimated all the conditional marginals. From a $10000$ sample we get the following Monte Carlo estimates
+
+
+To do so, we used the script
+sampleBackwards.m. From a $10000$ sample we get the following Monte Carlo estimates
 \begin{verbatim}
-X=sampleBackwards(p0,pT_long,10000);
->> [sum(X==1)'/10000 sum(X==2)'/10000] 
+X=sammpleBackwards(p0,pT_long,10000);
+>> [sum(X==1)'/n sum(X==2)'/n]         
 
 ans =
 
-    0.5897    0.4103
-    0.4606    0.5394
-    0.8983    0.1017
-    0.9740    0.0260
-    0.7795    0.2205
-    0.2205    0.7795
-    0.0511    0.9489
-    0.3356    0.6644
-    0.3181    0.6819
-    0.5863    0.4137
-    0.3579    0.6421
-    0.7531    0.2469
-    0.3702    0.6298
-    0.1298    0.8702
-    0.3685    0.6315
-    0.4018    0.5982
-    0.7210    0.2790
-    0.7947    0.2053
-    0.3128    0.6872
-    0.6741    0.3259
-    0.5823    0.4177
-    0.2532    0.7468
-    0.4061    0.5939
-    0.2376    0.7624
-    0.7354    0.2646
-    0.6259    0.3741
-    0.6155    0.3845
-    0.7936    0.2064
-    0.6384    0.3616
+    0.6500    0.3500
+    0.8670    0.1330
+    0.9376    0.0624
+    0.6135    0.3865
+    0.3802    0.6198
+    0.0800    0.9200
+    0.4998    0.5002
+    0.3060    0.6940
+    0.5990    0.4010
+    0.2477    0.7523
+    0.7289    0.2711
+    0.4373    0.5627
+    0.1032    0.8968
+    0.6182    0.3818
+    0.8593    0.1407
+    0.9461    0.0539
+    0.9083    0.0917
+    0.3201    0.6799
+    0.6765    0.3235
+    0.3067    0.6933
+    0.2878    0.7122
+    0.4007    0.5993
+    0.2568    0.7432
+    0.4790    0.5210
+    0.6192    0.3808
+    0.7010    0.2990
+    0.7343    0.2657
+    0.4007    0.5993
+    0.5825    0.4175
     1.0000         0
-
 \end{verbatim}
 
 \textbf{7.}
@@ -605,7 +601,7 @@ where
 \cs^{-1}:=\tau+w^{2}\lambda,\\
 \cmu=\cs^{-1}(\lambda w(y-m)+\tau\mu).
 \end{eqnarray*}
-By knowing the distribution of $x|y$ and $y|x$ we can use equation (\ref{eqnBayes}) to get
+By knowning the distribution of $x|y$ and $y|x$ we can use equation (\ref{eqnBayes}) to get
 \begin{equation*}
 \p(y)\propto\frac{\exp(-\frac{\lambda}{2}(y-(wx+m))^{2}}{\exp(-\frac{(x-\cmu)^{2}}{2\cs})}.
 \end{equation*}
@@ -617,7 +613,7 @@ Let us denote $a:=\frac{1}{\cs}$ and combine the terms in the quotient above to 
 \begin{equation*}
 \p(y)\propto \exp(-\frac{1}{2}(\lambda y^{2}-2\lambda(wx+m)y-a\cmu^{2}+2ax\cmu)).
 \end{equation*}
-From the definition of $\cmu$ is easy to see
+From the defintion of $\cmu$ is easy to see
 \begin{eqnarray*}
 \cmu=\frac{1}{a}(\lambda w(y-m)+\tau\mu),\\
 \cmu^{2}=a^{-2}(\lambda^{2}w^{2}(y-m)^{2}+2\lambda w(y-w)\tau\mu+(\tau\mu)^{2}).
@@ -627,7 +623,7 @@ Plugging these values into the posterior for $y$ and keeping only the terms that
 \p(y)\propto\exp(-\frac{1}{2}(\lambda y^{2}-2\lambda(wx+m)y-a(a^{-2}(\lambda^{2}w^{2}y^{2}-
 2\lambda^{2}w^{2}my+2\lambda w\tau\mu y)+2ax(\frac{1}{a}\lambda wy)))).
 \end{equation*}
-Rearranging and factoring the above equation reads as
+Rearraging and factoring the above equation reads as
 \begin{equation*}\label{eqnalmostthere}
 \p(y)\propto\exp(-\frac{1}{2}(C_{1}y^{2}+C_{2}y)),
 \end{equation*}
@@ -679,24 +675,7 @@ Assuming that the conditional independence properties are faithful to the graph,
 \item $B \perp F \; | \; E$. \textbf{True:} Boundary conditions.
 \item $B \perp F \; | \; I$. \textbf{True:} Same reason as before, every possible path from $B$ to $F$ contains $B\rightarrow E\leftarrow C$ with $E$ not seen.
 \item $B \perp F \; | \; J$. \textbf{True:} Same reason as before, every possible path from $B$ to $F$ contains $B\rightarrow E\leftarrow C$ with $E$ not seen.
-\item $B \perp F \; | \; C,E$. \textbf{False:} We are going to prove this by contradiction. That is assume that 
-\begin{equation}\label{eqncontradiction}
-\p(B,F|C,E)=\p(B|C,E)\p(F|C,E)=\p(B)\p(F|C).
-\end{equation}
-Assuming this is true we calculate
-\begin{equation*}
-\p(B,F|C,E)=\frac{\p(B,F,C,E)}{\p(C,E)}=\frac{\p(B)\p(C)\p(F|C)\p(E|B,C)}{\p(C)\p(E|C)}
-\end{equation*}
-By simplifying and rearranging
-\begin{equation*}
-\p(B,F|C,E)=\underbrace{\p(B)\p(F|C)}_{\p(B,F|C,E)\text{ by eqn. (\ref{eqncontradiction})}}\frac{\p(E|B,C)}{\p(E|C)}.
-\end{equation*}
-This means that 
-\begin{equation*}
-\p(E|B,C)=\p(E|C).
-\end{equation*}
-That is $E$ is independent of $B$, a contradiction.
-
+\item $B \perp F \; | \; C,E$. \textbf{False:} Think about this a little bit.
 \end{enumerate}
 
 \newpage
@@ -769,97 +748,7 @@ From the table we have $\p(S=1)=0.2$.
 \newline
 By the sum to one restriction we have $\p(S=0)=0.8$.
 \newline
-\textbf{2.}
-\newline
-From the table we have $\p(L=1|S=1)=0.1$.
-\newline
-\textbf{3.}
-\newline
-By marginalizing over $S$ we have
-\begin{eqnarray*}
-\p(L=1)=\sum_{S}\p(L=1,S)\\
-	=\sum_{S}\p(L=1|S)\p(S).
-\end{eqnarray*}
-Since we know all the values in the last sum, we conclude
-\begin{equation*}
-\p(L=1)=0.01\times0.8+0.1\times0.2=0.028.
-\end{equation*}
-\newline
-\textbf{4.}
-\newline
-From the table we have
-\begin{equation*}
-\p(X=1|T=1,L=1)=1.
-\end{equation*}
-\newline
-\textbf{5.}
-\newline
-To find the value of $\p(X=1|T=1)$ we marginalize over $L$ to get
-\begin{equation*}
-\p(X=1|T=1)=\sum_{L}\p(X=1|T=1,L)\p(L|T=1)
-\end{equation*}
-All terms in the summand were found before, so we calculate
-\begin{equation*}
-\p(X=1|T=1)=0.98056
-\end{equation*}
-\newline
-\textbf{6.}
-\newline
-Now we compute $\p(X=1|T=1,S=1)$ marginalizing over $L$ to get
-\begin{equation*}
-\p(X=1|T=1,S=1)=\sum_{L}\p(X=1|L,T=1,S=1)\p(L|T=1,S=1)
-\end{equation*}
-Since $L$ and $T$ are unconditionally independent  we get
-\begin{equation*}
-\p(X=1|T=1,S=1)=\sum_{L}\p(X=1|L,T=1,S=1)\p(L|S=1).
-\end{equation*}
-We know all the values in the sum, so we get
-\begin{equation*}
-p(X=1|T=1,S=1)=0.982
-\end{equation*}
-\newline
-\textbf{7.}
-\newline
-To find $\p(X=1)$, we first need to find the distribution for $T$. First we calculate
-\begin{eqnarray*}
-\p(T=0)=\sum_{V}\p(T=0|V)\p(V)\\
- 	=0.99\times 0.99+0.95\times 0.01\\
-	=0.9896
-\end{eqnarray*}
-This means that $\p(T=1)=0.0104$. With this we can easily calculate
-\begin{equation*}
-\p(X=1)=\sum_{L}\sum_{T}\p(X=1|L,T)\p(L)\p(T),
-\end{equation*}
-where in the last line we used the independence between $L$ and $T$. Plugging in every value in the sum we conclude
-\begin{equation*}
-\p(X=1)=0.3354.
-\end{equation*}
-\newline
-\textbf{8. }
-\newline
-Now we calculate $\p(T=1|X=1)$ via
-\begin{equation*}
-\p(T=1|X=1)=\frac{\p(X=1|T=1)\p(T=1)}{\p(X=1)}
-\end{equation*}
-Replacing by the numeric value of each probability we get
-\begin{equation*}
-\p(T=1|X=1)=\frac{0.9806\times 0.0104}{0.3354}=0.030406.
-\end{equation*}
-\newline
-\textbf{9.}
-\newline
-Since $L$ and $T$ are independent we get
-\begin{equation*}
-\p(T=1|L=1)=\p(T=1)\p(L=1)=2.912e-4.
-\end{equation*}
-\newline
-\textbf{10.}
-\newline
-Finally to calculate $\p(T=1|X=1,L=1)$ we use Bayes rule, unconditional independence between $T$ and $L$ and product rule for $\p(X,L)$ to get
-\begin{equation*}
-\p(T=1|X=1,L=1)=\frac{\p(X=1|T=1,L=1)\p(T=1)}{\p(L=1)\p(X=1|L=1)}=\frac{1\times 0.0104}{0.028\times 0.90104}=0.412222,
-\end{equation*}
-where we use marginalization over $T$ to calculate the term $\p(X=1|L=1)$.
+
 
 
 \subsection{Inpainting}
@@ -879,13 +768,13 @@ Hints: For parts 2 and 3, you may find it helpful to make an $m$ by $m$ cell arr
 
 \textbf{1.}
 \newline
-First we fitted an inhomogeneous Markov chain, where given a pixel $x_{j}$ we calculated the transition probability from $x_{j-1}$ as
+First we fitted an inhomogenous Markov chain, where given a pixel $x_{j}$ we calculated the transition probability from $x_{j-1}$ as
 \begin{equation*}
 \p(x_{j}|x_{j-1})=\frac{\text{Number of times we have a transition from $x_{j-1}$ to $x_{j}$}}{\text{Number of times we started at $x_{j}$}}.
 \end{equation*}
 We trained our model using the script demoInhomogeneousMC.m. We used the model on 4 random images from the test set. The results
 are shown below
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \includegraphics[scale=0.5]{inhomogeneousMC}
 \caption{Four samples from an inhomogeneous Markov Chain model}
@@ -893,8 +782,8 @@ are shown below
 
 \textbf{2 and 3.}
 \newline
-In this part of the exercise we trained two DAGs where each pixel had $8$ parents and $15$ parents. The parents for the
-pixel $(i,j)$ where the pixels in the region $((i-2):i,(j-2):j)$ and $((i-3):i,(j-3):j)$ respectively. The scripts
+In this part of the exercise we trained two DAGs where each pixel had $8$ parents and $15$ partents. The parents for the
+pixel $(i,j)$ where the pixels in the region $((i-2):i,(j-2):j)$ and $((i-3):i,(j-3):j)$ repectively. The scripts
 used to create the model are demoDAG8.m and demoDAG15.m. The results from this different models are shown below.
 
 \begin{figure}[H]
@@ -912,126 +801,14 @@ The results for the DAG with 15 parents are
 \end{figure}
 
 It is interesting to see that often the pixel located at $(28,28)$ has value $1$ despite all training images have the value of $0$ at that location.
-To understand why this is case consider the parent located at $(25,25)$. There are 16 training images with $1$ in that entry, this means $\p(x_{(25,25)}=1)\neq 0$.
-Also pixels
-$(25,26)$ has five images with that characteristic and $(26,25)$ five images. Hence there are different  combinations of vectors
+To understand why this is case consider the parent located at $(25,25)$. There are 16 training images with $1$ in that entry also pixels
+$(25,26)$ has five images with that characteristic and $(26,25)$ five images. Hence there are different diffent combinations of vectors
 $x_{pa((28,28))}\in\{0,1\}^{15}$ such that
 \begin{equation*}
 \p(x_{(28,28)=1}|x_{pa((28,28))})\neq 0.
 \end{equation*}
-More precisely the key is that the parent $x_{(25,25)}$ has non-zero marginal probability, hence  if $x_{(25,25)}=1$ for example
-\begin{equation*}
-\p(x_{(28,28)}=1,x_{(28,27)},\ldots,x_{(25,25)}=1)=\underbrace{\p(x_{(25,25)}=1)}_{\neq 0}\underbrace{\p(x_{(26,26)}=1|x_{(25,25)}=1)\cdots\p(x_{(28,28)}|x_{pa((28,28))})}_{\neq 0}.
-\end{equation*}
-This represents the fact that since the (grand) parent (25,25) has non-zero entries there are sequences ending with $x_{(28,28)}=1$ with non-zero probability.
-\newline
+
 \textbf{4.}
-\newline
 Finally we trained a sigmoid belief network where the parents of the pixel located at the point $(i,j)$ are the pixels in the region
 $(1:i,1:j)$. we used the script demoSigmoid.m (it takes a couple of minutes to load). The results are shown below.
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.5]{sigmoid}
-\caption{Four samples from a sigmoid belief network.}
-\end{figure}
-\newpage
-
-\subsection*{3. Paper Review}
-\subsubsection*{Finding Relevant Papers}
-The list of the top ten most important papers found so far are
-\begin{verbatim}
-[1] Kim, Kyoung-jae. "Financial time series forecasting using support vector machines." 
-Neurocomputing 55.1 (2003): 307-319.
-
-[2] Tsai, C. F., and S. P. Wang. "Stock price forecasting by hybrid machine learning techniques." 
-Proceedings of the International MultiConference of Engineers and Computer Scientists. 
-Vol. 1. No. 755. 2009.
-
-[3] Yeh, Chi-Yuan, Chi-Wei Huang, and Shie-Jue Lee. "A multiple-kernel support 
-vector regression approach for stock market price forecasting." 
-Expert Systems with Applications 38.3 (2011): 2177-2186.
-
-[4] Yoo, Paul D., Maria H. Kim, and Tony Jan. "Machine learning techniques and use of event 
-information for stock market prediction: A survey and evaluation." 
-Computational Intelligence for Modelling, Control and Automation, 
-2005 and International Conference on Intelligent Agents, 
-Web Technologies and Internet Commerce, International Conference on. Vol. 2. IEEE, 2005.
-
-[5] Hassan, Md Rafiul, and Baikunth Nath. "Stock market forecasting using hidden Markov model: 
-a new approach." Intelligent Systems Design and Applications, 2005. ISDA'05. Proceedings. 
-5th International Conference on. IEEE, 2005.
-
-[6] Oh, Kyong Joo, Tae Yoon Kim, and Sungky Min. "Using genetic algorithm to support portfolio 
-optimization for index fund management." Expert Systems with Applications 28.2 (2005): 371-379.
-
-[7]Freitas, Fabio D., Alberto F. De Souza, and Ailson R. de Almeida. "Prediction-based portfolio 
-optimization model using neural networks." Neurocomputing 72.10 (2009): 2155-2170.
-
-[8] Milosevic, Nikola. "Equity forecast: Predicting long term stock price movement using machine 
-learning." arXiv preprint arXiv:1603.00751 (2016).
-
-[9] Gabaix, Xavier, et al. "A theory of power-law distributions in financial market fluctuations" 
-Nature 423.6937 (2003): 267-270.
-
-[10] Oliveira, Nuno, Paulo Cortez, and Nelson Areal. "The impact of microblogging data for stock 
-market prediction: Using Twitter to predict returns, volatility, trading volume and survey 
-sentiment indices." Expert Systems with Applications 73 (2017): 125-144.
-\end{verbatim}
-\newpage
-\subsubsection*{Paper Review}
-The paper chosen to do the review is paper number [5] if the above list.
-\newline
-\textbf{Summary}
-\newline
-The paper Stock market forecasting using hidden Markov model: a new approach, by Hassan et.al.
-Even though is a little bit updated, is the first paper that provides an implements the use
-of Hidden Markov Models (HMM) to the task of stock market forecasting. HMMs were successfully applied
-before to in areas like speech recognition DNA sequencing etc. But before this paper
-was published HMM had not been applied to stock market prediction. In particular the 
-authors of the mentioned paper chose to apply the method in the market of airlines.
-
-The authors propose to apply HMM with four features. The features they selected where
-\begin{itemize}
-\item Opening price.
-\item Closing price.
-\item Highest price.
-\item Lowest price.
-\end{itemize}
-
-The HMM takes in this four inputs and gives as an output the next day's closing price. To evaluate the performance
-their method, the authors gathered the information from 4 different airlines. They used as a training
-set the data of these airlines from the dates of December 18 2002 to 29 September 2004 to predict
-the closing stock price on the 30 of September. In the paper the authors compare their results with
-the mainstream method at that time: neural networks (NN). Based on their result, they were able
-to outperform the results obtained when using (NN) to predict the closing price. With this overview
-of the paper, we now proceed to evaluate the strengths and weaknesses of the paper.
-
-\textbf{Strengths}
-\newline
-\enum{
-\item The paper proposes for the first time a novel method to tackle the long time and unsolved problem
-of predicting the prices in the stock market.
-\item The explanation are straightforward and is easy to understand the main idea of the method they use.
-\item The results obtained look promising and outperform a well known method by that time. They also
-mention where this research could lead to by talking about their future work.
-}
-
-\textbf{Weaknesses}
-\enum{
-\item The authors chose just four features under the argument that it is difficult to choose
-features in the setting of HMM for financial prediction and they don't mention any intention
-to improve on that.
-\item They don't explain why they chose the airlines stock market. Is it because they try
-other different markets and they didn't get as nice results as with airlines? Is because
-they had more data from this market? Was completely at random the choice?
-\item In the same spirit they don't explain why they chose to measure the performance
-of their model in predicting the closing price of the stocks. Was because when they
-try to predict other features they failed?
-\item Finally, this might be just nitpicking, but the graphs they show were made in Excel 
-and I find it unprofessional to do that in the academic environment, since there is
-a wide variety of (free) softwares capable to plot in a much more aesthetic way.
-}
-
-
-
 \end{document}
