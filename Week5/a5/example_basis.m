@@ -8,7 +8,7 @@ load basisData.mat % Loads X and y
 [n,d] = size(X);
 
 % Fit least-squares model
-degree = 5;
+degree = 2;
 model = leastSquaresBasis(X,y,degree);
 
 % Compute training error

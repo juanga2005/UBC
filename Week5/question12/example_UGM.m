@@ -10,22 +10,9 @@ k = 10; % We have 10 digits
 p_11 = sum(X(:,1)==1)/n
 
 %% Make Adjacency Matrix and EdgeStruct
-adj = zeros(d); % First lets try an empty adjacency matrix
-if 0 % Chain dependency
-adj(1,2) = 1;
-adj(2,3) = 1;
-adj(3,4) = 1;
-adj = adj+adj';
-elseif 0 % Second-order chain
-    adj(1,2) = 1;
-    adj(2,3) = 1;
-    adj(3,4) = 1;
-    adj(1,3) = 1;
-    adj(2,4) = 1;
-adj = adj+adj';
-else
-   adj = ones(4)-eye(4); 
-end
+%adj = zeros(d); % First lets try an empty adjacency matrix
+%adj=spdiags([ones(d,1) zeros(d,1) ones(d,1)],-1:1,d,d)
+adj=ones(d);adj(1:(d+1):end)=0;
 edgeStruct = UGM_makeEdgeStruct(adj,k);
 
 %% Choose parameter tieing scheme

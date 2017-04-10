@@ -1,0 +1,450 @@
+\documentclass{article}
+
+\usepackage{etoolbox}
+
+
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{amssymb}
+\usepackage{listings} % For displaying code
+
+\begin{document}
+
+\definecolor{blu}{rgb}{0,0,1}
+\def\blu#1{{\color{blu}#1}}
+\definecolor{gre}{rgb}{0,.5,0}
+\def\gre#1{{\color{gre}#1}}
+\definecolor{red}{rgb}{1,0,0}
+\def\red#1{{\color{red}#1}}
+\def\norm#1{\|#1\|}
+\newcommand{\argmin}[1]{\mathop{\hbox{argmin}}_{#1}}
+\newcommand{\argmax}[1]{\mathop{\hbox{argmax}}_{#1}}
+\def\R{\mathbb{R}}
+\newcommand{\fig}[2]{\includegraphics[width=#1\textwidth]{a5f/#2}}
+\newcommand{\centerfig}[2]{\begin{center}\includegraphics[width=#1\textwidth]{a5f/#2}\end{center}}
+\def\items#1{\begin{itemize}#1\end{itemize}}
+\def\enum#1{\begin{enumerate}#1\end{enumerate}}
+\def\argmax{\mathop{\rm arg\,max}}
+\def\argmin{\mathop{\rm arg\,min}}
+\def\half{\frac 1 2}
+\newcommand{\code}[1]{\lstinputlisting[language=Matlab]{a5f/#1}}
+\newcommand{\alignStar}[1]{\begin{align*}#1\end{align*}}
+\newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+\newcommand{\p}{\mathbb{P}}
+
+\title{CPSC 540 Assignment 5 (due April 10)}
+\author{UGMs, Bayes, and Literature Survey}
+\date{}
+\maketitle
+
+\section{Undirected Graphical Models}
+
+\subsection{Conditional UGM}
+
+Consdier modeling the dependencies between sets of binary variables $x_j$ and $y_j$ with the following UGM which is a variation on a stacked RBM:
+%\centerfig{.6}{weirdRBM}
+Computing univariate marginals in this model will be NP-hard in general, but the graph structure allows efficient block updates by conditioning on suitable subsets of the variables (this could be useful for designing approximate inference methods).
+For each of the conditioning scenarios below, \blu{draw the conditional UGM and comment on how expensive it would be to compute univariate marginals} in the conditional UGM.
+\enum{
+\item Conditioning on all the $z$ and $h$ values.
+\item Conditioning on all the $x$ and $h$ values.
+\item Conditioning on all the $z$ and $y$ values.
+\item Conditioning on all the $x$ and $z$ values.
+}
+
+\subsubsection*{Solutions}
+
+\textbf{1.}
+By conditioning on $z$ and $h$ we get the following UGM
+\begin{center}
+\textbf{You have to show the resulting  UGM}
+\end{center}
+In this case since we have a fully disconected graph, estimating the univariate marginals is trivial.
+\newline
+\newline
+\textbf{2.}
+\newline
+In this case the UGM that we obtain is shown below
+\begin{center}
+\textbf{Present the UGM when conditioning on x and h}
+\end{center}
+As before we have a fully disconnected graph, i.e. all variables are independent, hence estimating the marginals is trivial too.
+\newline
+\newline
+\textbf{3.}
+\newline
+In this case we have the following UGM when we condition on $z$ and $y$ we get the following UGM
+\begin{center}
+\textbf{Present the UGM when conditioning on z and y}
+\end{center}
+In this case we have that the $x_{i}$ form a fully disconected graph, hence calculating the univariate marginals in the $x$ variables
+is straightforward. For the $h$ variables the situation is more interesting since we have a chain structure. In this case the three
+width is $\omega=1$, hence the cost of calculating the marginals is $\mathcal{O}(dk^{\omega+1})=\mathcal{O}(4*2^{2})$.
+\newline
+\newline
+\textbf{4.}
+\newline
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Fitting a UGM to PINs}
+
+The function \emph{example\_UGM} loads a dataset $X$ containing samples of PIN numbers, based on the probabilities from the article at this URL: \url{http://www.datagenetics.com/blog/september32012}.\footnote{I got the probabilities from the reverse-engineered heatmap here: \url{http://jemore.free.fr/wordpress/?p=73}.}
+
+This function shows how to use the UGM software to fit a UGM model to the dataset, where all node/edge parameters are tied and the graph is empty. It then performs decoding/inference/sampling in the fitted model. Unfortunately, this is not a very good model of the data for several reasons:
+\enum{
+\item The decoding is $1 \; 1 \; 1 \; 1$, whereas in the data the most likely value by far is $1 \; 2 \; 3\; 4$. Similarly, the sampler doesn't tend to generate $1 \; 2 \; 3\; 4$ even though this happens in more than 1/10 samples.
+\item The marginal probability of the first number being $1$ is 22.06\%, which is acutally too low (it should be 38.54\%). In addition, the marginal probabilities of the remaining nubmers being $1$ are also 22.06\%, and these numbers are too high. 
+\item Conditioned on the first three numbers being $1 \; 2 \; 3$, the probability that the last number is 4 is less than 10\% in the model, whereas in the data it's more than 90\%.
+}
+In this question you'll explore better models of this data and different aspects of UGMs.
+\enum{
+\item \blu{Why does $w$ have a length of $9$?}
+\item \blu{Write an equation for the model being used by the code.}
+\item \blu{What are potential sources of the problems above?}
+\item Modify the demo to use a \emph{tied} value of 0 and re-run the demo. \blu{Why does the model now have $36$ parameters? Comment on whether this fixes each of the above 3 issues.}
+\item Modify the demo to use chain-structured dependency (keeping the \emph{tied} value at 0). \blu{Comment on whether this fixes each of the above 3 issues.}
+\item Modify the demo to use a completely-connected graph (keeping the \emph{tied} value at 0). \blu{Comment on whether this fixes each of the above 3 issues.}
+\item UGM only support pairwise graphs, \blu{what would the effect of higher-order potentials be? What would the disdavantages of higher-order potentials be?}
+}
+If you want to further explore UGMs, there are quite a few demos on the UGM webpage that you can go through which cover all sorts of things like approximate inference and CRFs.
+
+\subsubsection*{Solution}
+
+\textbf{1.}
+\newline
+Our state space has $k=10$ elements (numbers from 0 to 9). We can always fix one of the values $w_{j}=0$ (why??).
+Hence in our case, we need to find only $10-1=9$  
+values of the vector $w$.
+\newline
+\newline
+\textbf{2.}
+\newline
+Since we are using a log-linear model for $x=[x^{1},x^{2},x^{3},x^{4}]^{T}$, with independence among the variables
+i.e. we have that the set of edges in the UGM is empty. Then the model we are using is of the form
+\begin{equation*}
+\p(x|w)=\prod_{i=1}^{4}\p(x^{i}|w)=\frac{1}{Z(w)}\exp(-\sum_{i=1}^{4}w^{T}F(x^{i})).
+\end{equation*}
+In our case we have $w=[w_{1},\ldots, w_{9}]^{T}$ and $F(x^{i})=[F_{1}(x^{i}),\ldots F_{9}(x^{i})]$, where
+\begin{equation*}
+F_{j}(x^{i})=I(x^{i}=j)\qquad\text{for }j=1,2,\ldots,9\text{ and } i=1,2,3,4.
+\end{equation*}
+\newline
+\textbf{3.}
+\newline
+\newline
+Since we are using a fully disconnected graph as our model, this means we assume independence between the variables. This
+means that the model can be written in term of potentials as
+\begin{equation*}
+p(x|w)\propto \prod_{j=1}^{4}\phi_{j}(x^{j}),
+\end{equation*}
+with $\phi_{j}(k)=\exp(w_{k})$ for $k=1,2,\ldots,9$ and all $j$. Hence, when doing decoding we have
+\begin{equation*}
+\max_{x}\p(x|w)=\max_{x^{1}}\phi_{1}(x^{1})\max_{x^{2}}\phi_{2}(x^{2})\max_{x^{3}}\phi_{3}(x^{3})\max_{x^{4}}\phi_{4}(x^{4}).
+\end{equation*}
+and from running the script example$\_$UGM.m we know that the maximum for each of the potential functions
+occurs when $\phi_{j}(1)=1.6722$ for all $j$. Hence by doing a decoding under this model we would 
+conclude that the most likely values is $1,1,1,1$. Which is clearly wrong. This result also points
+to a second and a third weakness in the model, namely, 
+we are missing all correlations between digits. For instance
+if the first 3 digits are $1,2,3$ we know from the data that the most likely number to continue the 
+sequence would be $4$. But since the model assumes all variables to be independent, we missed that.
+Also when calculating the marginals we ommit all contributions from the other digits, for example
+for $x_{1}$ we have
+\begin{equation*}
+p(x_{1}|w)=\frac{\phi_{1}(x^{1})}{Z(w)}\prod_{j=2}^{4}\sum_{x^{j}}\phi_{j}(x^{j}).
+\end{equation*}
+So here we also missed the connections that relate the different digits.
+\newline
+\newline
+\textbf{4.}
+\newline
+When setting the parameter $tied=0$ now each potential function satisfy
+\begin{equation*}
+\log(\phi_{i}(x^{j})=w_{ij}
+\end{equation*}
+Again we have the freedom to fix one of the values one of the $10$ spaces. In this case the potential
+function for the value $k=0$ is fixed at $1$ hence for the other $9$ potential functions, each function
+having $4$ different outputs, means that we need 36 different $w$ parameters.
+
+With this model the decoding (obtained with the command xDecode) gives $[1,2,3,4]$ So in this case
+the first problem is fixed. On the other hand we calcualte the marginal for the first digit as 
+\begin{equation*}
+\p(x_{1}=1|w)=\frac{\overbrace{\phi_{1}(1)}^{3.6222}}{\underbrace{Z(w)}_{3618.2}}\underbrace{\prod_{j=2}^{4}\sum_{x^{j}}\phi_{j}(x^{j})}_{383.4795}.
+\end{equation*}
+By doing so, we get a marginal of $0.3839$. In a similar manner we calculate the marginals for the other 3 digits to be one and we obtaine
+\begin{align*}
+\p(x^{2}=1|w)=0.2311 \\
+\p(x^{3}=1|w)= 0.0783\\
+\p(x^{4}=1|w)=0.0787 \\
+\end{align*}
+Comparing with the estimates from the training data given by $0.1530,0.1949,0.1471$, we can see that this numbers do not match
+with the results from the model with untied parameters.
+
+Finally when we calculate the probability for the fourth pin number given that the first three are $1,2,3$ we get the following 
+probabilities
+\begin{verbatim}
+condNM =
+
+0.1471    0.1013    0.0802    0.1894    0.0731    0.0621    0.0770    0.0733    0.0801    0.1164
+\end{verbatim}
+Even though it predicts well the fact that the most likely value is $4$. The model gives a probability of $0.1894$, however
+when we calculate the number of pins that starting with $1,2,3$ end up with $4$ is $0.9286$. Hence the prediction
+does not give accurate probabilities.
+\newline
+\newline
+\textbf{5.}
+\newline
+In this case we use the adjacency matrix
+\begin{equation*}
+A=\mat{
+0 & 1 & 0 & 0\\
+1 & 0 & 1 & 0\\
+0 & 1 & 0 & 1\\
+0 & 0 & 1 & 0
+}
+\end{equation*}
+With this the parameter $w$ has 336 components, 36 of them correspond to the unary potentials as in the previous exercises. The $300$ more elements comes from
+the binary potentials where each $\phi_{ij}(x^{i},x^{j}), i<j$ contains $100$ hundred possible values and we have 3 potentials, namely $\phi_{12},\phi_{23},\phi_{34}$.
+In this new model, the decoding gives the sequence
+\begin{equation*}
+xDecode=\mat{1\\2\\3\\4}.
+\end{equation*}
+To calculate the marginal probability for the first digit to be $1$ we  need to calculate it as
+\begin{equation*}
+\p(x^{1}=1|w)=\frac{\phi_{1}(1)}{Z}\sum_{x^{2}}\phi_{2}(x^{2})\phi_{12}(1,x^{2})\overbrace{\sum_{x^{3}}\phi_{23}(x^{2},x^{3})\phi_{3}(x^{3})}^{M(x^{2})}
+\underbrace{\sum_{x^{4}}\phi_{34}(x^{3},x^{4})\phi_{4}(x^{4})}_{M(x^{3})},
+\end{equation*}
+where we memoize the values of $M(x^{2})$ and $M(x^{3})$. Similar formulas hold to calculate the marginal for the second third or four digit to be $1$. 
+Under this model we have
+\begin{align*}
+\p(x^{1}=1|w)=0.3223\\
+\p(x^{2}=1|w)=0.3128 \\
+\p(x^{3}=1|w)= 0.1674\\
+\p(x^{4}=1|w)=0.1435 \\
+\end{align*}
+In this case we can see that the value for the first digit to be one  is underestimated and for the second digit to be one is overestimated. But now
+in this case the marginals for the third and fourth values are pretty close to the value given by the training sample $0.1949,0.1471$. So we gain
+accuracy for the last two marginals, but we loose accuracy for the first digit. 
+
+Finally under this model we continue to underestimate the value of the fourth digit to be four given that the first three digits are $1,2,3$. In this
+case the probability is given by
+\begin{equation*}
+\p(x^{4}=1|x^{j}=j,j=1,2,3)=0.5028.
+\end{equation*}
+This estimate is better than the one obtained in part $4$ of this exercise, but is not accurate.
+\newline
+\newline
+\textbf{6.}
+\newline
+
+
+
+\newpage
+
+\section{Bayesian Inference}
+
+\subsection{Conjugate Priors}
+
+Consider a $y \in \{1,2,3\}$ following a multinoulli distribution with parameters $\theta = \{\theta_1,\theta_2,\theta_3\}$,
+\[
+y | \theta \sim \text{Mult}(\theta_1,\theta_2,\theta_3).
+\]
+We'll assume that $\theta$ follows a Dirichlet distribution (the conjugate prior to the multinoulli) with parameters $\alpha = \{\alpha_1,\alpha_2,\alpha_3\}$,
+\[
+ \theta \sim \mathcal{D}(\alpha_1,\alpha_2,\alpha_3).
+\]
+Thus we have
+\[
+p(y|\theta,\alpha) = p(y|\theta) = \theta_1^{I(y=1)}\theta_2^{I(y=2)}\theta_3^{I(y=3)}, \quad p(\theta|\alpha) = \frac{\Gamma(\alpha_1+\alpha_2+\alpha_3)}{\Gamma(\alpha_1)\Gamma(\alpha_2)\Gamma(\alpha_3)}\theta_1^{\alpha_1-1}\theta_2^{\alpha_2-1}\theta_3^{\alpha_3-1}.
+\]
+Compute the following quantites:
+\enum{
+\item \blu{The posterior distribution,
+\[
+p(\theta|y,\alpha).
+\]
+\item \blu{The marginal likelihood of $y$ given the hyper-parameters $\alpha$,
+\[
+p(y|\alpha) = \int p(y,\theta|\alpha)d\theta,
+\]}
+\item \blu{The posterior mean estimate for $\theta$,
+\[
+\mathbb{E}_{\theta|y,\alpha}[\theta_i] = \int \theta_i p(\theta|y,\alpha)d\theta,
+\]}
+which (after some manipulation) should not involve any $\Gamma$ functions.
+}
+\item \blu{The posterior predictive distribution for a new independent observation $\hat{y}$ given $y$,
+\[
+p(\hat{y}|y,\alpha) =  \int p(\hat{y},\theta|y,\alpha)d\theta.
+\]
+}
+}
+ Hint: You can use $D(\alpha) =  \frac{\Gamma(\alpha_1)\Gamma(\alpha_2)\Gamma(\alpha_3)}{\Gamma(\alpha_1+\alpha_2+\alpha_3)}$ to represent the normalizing constant of the prior and $D(\alpha^+)$ to give the normalizing constant of the posterior. You will also need to use that $\Gamma(\alpha+1) = \alpha\Gamma(\alpha)$. For some calculations you may find it a bit cleaner to parameterize the posterior in terms of $\beta_j = I(y=j) + \alpha_j$, and convert back once you have the final result.
+
+\subsubsection*{Solutions}
+Before we start with this exercise, let us derive a result that is going to be used frequently. If $\theta|\alpha\sim\mathcal{D}(\alpha_{1},\alpha_{2},\alpha_{3})$.
+then
+\begin{equation*}
+1=\int_{S}\p(\theta|\alpha)d\theta=\frac{\Gamma(\alpha_1)\Gamma(\alpha_2)\Gamma(\alpha_3)}{\Gamma(\alpha_1+\alpha_2+\alpha_3)}\int_{S}\theta_1^{\alpha_1-1}
+\theta_2^{\alpha_2-1}\theta_3^{\alpha_3-1}d\theta,
+\end{equation*}
+where $S$ is the set
+\begin{equation*}
+S=\{(x,y,z)\in\mathbb{R}^{3}|0\leq x\leq 1,0\leq y\leq 1-x,0\leq z\leq 1-x-y\}.
+\end{equation*}
+Hence for $a,b,c$ we have
+\begin{equation}\label{eqnkeyidentity}
+\frac{\Gamma(a+b+c+3)}{\Gamma(a+1)\Gamma(b+1)\Gamma(c+1)}=\int_{S}\theta_1^{a}
+\theta_2^{b}\theta_3^{c}d\theta.
+\end{equation}
+Now we proceed with part 1
+\newline
+\newline
+\textbf{1.}
+\newline
+We have the model $\alpha\rightarrow\theta\rightarrow y$, hence $y\perp\alpha |\theta$.  Taking this into account and using Bayes rule we have
+\begin{equation*}
+\p(\theta|y,\alpha)\propto\p(y|\theta)\p(\theta|\alpha).
+\end{equation*}
+By replacing each probability on the RHS by its formula we get
+\begin{equation*}
+\p(\theta|y,\alpha)\propto\prod_{j=1}^{3}\theta^{\beta_{j}-1},
+\end{equation*}
+where the proportionality constant is given by 
+\begin{equation*}
+D(\alpha^{+}):=\int_{S}\prod_{j=1}^{3}\theta^{\beta_{j}-1}d\theta=\frac{\Gamma(\beta_1)\Gamma(\beta_2)\Gamma(\beta_3)}{\Gamma(\beta_1+\beta_2+\beta_3)}.
+\end{equation*}
+In the last line we used equation (\ref{eqnkeyidentity}). With this the full posterior is written as
+\begin{equation}\label{eqnfullposterior}
+\p(\theta|y,\alpha)=\frac{1}{D(\alpha^{+})}\prod_{j=1}^{3}\theta^{\beta_{j}-1}.
+\end{equation}
+\newline
+\newline
+\textbf{2.}
+\newline
+In this case by using the product rule and $y\perp\alpha|\theta$ we have
+\begin{equation*}
+\p(y|\alpha)=\int\p(y,\theta|\alpha)d\theta=\int\p(y|\theta)\p(\theta|\alpha)d\theta.
+\end{equation*}
+By replacing the appropiate values we end up with
+\begin{equation*}
+\p(y|\alpha)=\frac{1}{D(\alpha)}\int_{S}\prod_{j=1}^{3}\theta_j^{\beta_{j}-1}d\theta.
+\end{equation*}
+The integral in the RHS is the same integral as in the proportionality constant in the previous exercise, hence we conclude
+\begin{equation*}
+\p(y|\alpha)=\frac{1}{D(\alpha)D(\alpha^{+})}.
+\end{equation*}
+It is not hard to see that $\sum_{y=1}^{3}\p(y|\alpha)=1$.
+\newline
+\newline
+\textbf{3.}
+\newline
+Using the posterior obtained in section 1 of this exercise, it is not hard to see that 
+\begin{equation*}
+\theta_{i}\p(\theta|y,\alpha)=\frac{1}{D(\alpha^{+})}\prod_{j=1}\theta^{\beta_{j}-1+\delta_{ij}},
+\end{equation*}
+Hence using equation (\ref{eqnkeyidentity}) we get
+\begin{equation*}
+\mathbb{E}[\theta_{i}]=\int_{S}\frac{1}{D(\alpha^{+})}\prod_{j=1}\theta^{\beta_{j}-1+\delta_{ij}}d\theta=\frac{1}{D(\alpha^{+})}
+\frac{\prod_{j=1}^{3}\Gamma(\beta_{j}+\delta_{ij})}{\Gamma(\beta_{1}+\beta_{2}+\beta_{3}+1)}.
+\end{equation*}
+If $\delta_{ij}=1$ we would like to use the identity $\Gamma(\beta+1)=\Gamma(\beta)$ if $\delta_{ij}=0$ we don't want to use any identity
+of the gamma function. This requierment can be written as
+\begin{equation*}
+\Gamma(\beta_{j}+\delta_{ij})=\Gamma(\beta_{j})(1+\delta_{ij}(\beta_{j}-1).
+\end{equation*}
+With this we get
+\begin{equation*}
+\mathbb{E}[\theta_{i}]=\frac{1}{D(\alpha^{+})}
+\frac{\prod_{j=1}^{3}\Gamma(\beta_{j})(1+\delta_{ij}(\beta_{j}-1))}{\Gamma(\beta_{1}+\beta_{2}+\beta_{3}+1)}.
+\end{equation*}
+Recalling the definition of $D(\alpha^{+})$ we get
+\begin{equation*}
+\mathbb{E}[\theta_{i}]=\frac{\Gamma(\alpha_1+\alpha_2+\alpha_3)}{\Gamma(\alpha_1)\Gamma(\alpha_2)\Gamma(\alpha_3)}
+\frac{\prod_{j=1}^{3}\Gamma(\beta_{j})(1+\delta_{ij}(\beta_{j}-1))}{\Gamma(\beta_{1}+\beta_{2}+\beta_{3}+1)}
+\end{equation*}
+Finally since $\beta_j=I(y=j)+\alpha_j$ we have $\Gamma(\beta_j)=\Gamma(\alpha_j)(1+I(y=j)(\alpha_j-1))$ and
+$\beta_{1}+\beta_{2}+\beta_{3}=\alpha_1+\alpha_2+\alpha_3+1$. We finally obtain everything in terms of $\alpha$
+\begin{equation*}
+\mathbb{E}[\theta_{i}]=\frac{\Gamma(\alpha_1+\alpha_2+\alpha_3)}{\Gamma(\alpha_1)\Gamma(\alpha_2)\Gamma(\alpha_3)}
+\frac{\prod_{j=1}^{3}\Gamma(\alpha_{j})(1+I(y=j)(\alpha_j-1))(1+\delta_{ij}(\alpha_{j}+I(y=j)-1))}{\Gamma(\alpha_{1}+\alpha_{2}+\alpha_{3}+2)}
+\end{equation*}
+By using the recursive property of the Gamma function and simplifying we conclude
+\begin{equation*}
+\mathbb{E}[\theta_{i}]=\frac{\prod_{j=1}^{3}(1+I(y=j)(\alpha_j-1))(1+\delta_{ij}(\alpha_{j}+I(y=j)-1))}{(\alpha_1+\alpha_2+\alpha_3)(\alpha_1+\alpha_2+\alpha_3+1)}.
+\end{equation*}
+simplyfing we conclude
+\begin{equation*}
+\mathbb{E}[\theta_{i}|y]=\frac{\alpha_{y}(\alpha_{i}+1)}{(\alpha_1+\alpha_2+\alpha_3)(\alpha_1+\alpha_2+\alpha_3+1)}.
+\end{equation*}
+\newline
+\newline
+\textbf{4.}
+\newline
+In this case using independence properties we have
+\begin{equation*}
+\p(\hat{y}|y,\alpha)=\int_{S}\p(\hat{y},\theta|y,\alpha)d\theta=\int_{S}\p(\hat{y}|\theta)\p(\theta|y,\alpha)d\theta.
+\end{equation*}
+We have a close expression for all the terms in the last integrand in the RHS. By plugging in those expressions we obtain.
+\begin{equation*}
+\p(\hat{y}|y,\alpha)=\frac{1}{D(\alpha^{+})}\int_{S}\prod_{j=1}^{3}\theta^{I(\hat{y}=j)+\beta_{j}-1}d\theta.
+\end{equation*}
+Using the result in equation (\ref{eqnkeyidentity}) we get
+\begin{equation*}
+\p(\hat{y}|y,\alpha)=\frac{1}{D(\alpha^{+})}\frac{\prod_{j=1}^{3}\Gamma(I(\hat{y}=j)+\beta_{j})}{\Gamma(\beta_1+\beta_2+\beta_3+1)}.
+\end{equation*}
+By replacing the value of $D(\alpha^{+})$ and using $\Gamma(\beta_j+I(\hat{y}=j))=\Gamma(\beta_j)(1+I(\hat{y}=j)(\beta_j-1))$ we have
+\begin{equation*}
+\p(\hat{y}|y,\alpha)=\frac{\Gamma(\beta_1+\beta_2+\beta_3)}{\Gamma(\beta_1)\Gamma(\beta_2)\Gamma(\beta_3)}
+\frac{\prod_{j=1}^{3}\Gamma(\beta_j)(1+I(\hat{y}=j)(\beta_j-1))}{\Gamma(\beta_1+\beta_2+\beta_3+1)}=\frac{\prod_{j=1}^{3}(1+I(\hat{y}=j)(\beta_j-1))}{\beta_1+\beta_2+\beta_3}.
+\end{equation*}
+Or more concisely
+\begin{equation*}
+\p(\hat{y}|y,\alpha)=\frac{\beta_{\hat{y}}}{\beta_1+\beta_2+\beta_3}.
+\end{equation*}
+\newpage
+
+
+\subsection{Empirical Bayes}
+
+ Consider the model
+\[
+y_i \sim \mathcal{N}(w^T\phi(x_i),\sigma^2), \quad w_j \sim \mathcal{N}(0,\lambda).
+\]
+By using properties of Gaussians the marginal likelihood has the form
+\[
+p(y_i|x_i,\sigma,\lambda) = (2\pi)^{-d/2}|C|^{-1/2}\exp\left(-\frac{y^TC^{-1}y}{2}\right),
+\]
+which gives a negative log-marginal likelihood of
+\[
+- \log p(y_i|x_i,\sigma,\lambda) \propto \log|C| + y^TC^{-1}y + \text{const.}
+\]
+where
+\[
+C = \frac{1}{\sigma^2}I + \frac{1}{\lambda}\Phi(X)\Phi(X)^T,
+\]
+As discussed in class, the marginal likelihood can be used to optimize hyper-parameters like $\sigma$, $\lambda$, and even the basis $\phi$.
+
+The demo \emph{example\_basis} loads a dataset and fits a degree-2 polynomial to it. Normally we would use a test set to choose the degree of the polynomial but here we'll use the marginal likelihood of the training set. Write a function, \emph{leastSquaresEmpiricalBaysis}, that uses the marginal likelihood to choose the degree of the polynomial as well as the parameters $\lambda$ and $\sigma$ (you can assume that all $\lambda_j$ are equal, and you can restrict your search for $\lambda$ and $\sigma$ to powers of 10). \blu{Hand in your code and report the marginally most likely values of the degree, $\sigma$, and $\lambda$.} You can use the \emph{logdet} function to compute the log-determinant.
+
+{Hint: computing $C^{-1}y$ by explicitly forming $C^{-1}$ may give you numerical issues that lead to non-sensical solution. You can avoid these by using $y^TC^{-1}y = y^Tv$ where $v$ is a solution to $Cv = y$ (Matlab will still give a warning due to ill-conditioning, but it won't return non-sensical results).}
+
+
+
+
+\end{document}
